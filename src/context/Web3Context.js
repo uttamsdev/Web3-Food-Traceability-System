@@ -24,6 +24,7 @@ export const Web3ContextProvider = ({ children }) => {
     const [foodTrace, setFoodTrace] = useState(null); // Store food trace data
     const router = useRouter();
     const [signupLoading, setSignupLoading] = useState(false);
+    const [allUsers, setAllUsers] = useState();
 
     // Create a connection to the smart contract
     const createEthereumContract = () => {
@@ -105,8 +106,8 @@ export const Web3ContextProvider = ({ children }) => {
             setSignupLoading(false);
             router.push('/dashboard');
             Swal.fire({
-                title: "Account Created!",
-                text: "Your account Successfully Created.",
+                title: "Account Created! 🎉, Wait for Approval",
+                text: "Your account creation request is successful. Wait for approval.",
                 icon: "success"
             });
 
@@ -121,6 +122,7 @@ export const Web3ContextProvider = ({ children }) => {
             setLoading(true);
             const contract = createEthereumContract();
             const users = await contract.getPendingUsers();
+            console.log('pending users', users);
             setPendingUsers(users);
             setLoading(false);
         } catch (error) {
@@ -246,11 +248,27 @@ export const Web3ContextProvider = ({ children }) => {
         }
     };
 
+    // Function to trace food items
+    const getAllUsers = async (foodId) => {
+        try {
+            setLoading(true);
+            const contract = createEthereumContract();
+            const userData = await contract.getAllUsers();
+            console.log("userdata", userData)
+            setAllUsers(userData);
+            setLoading(false);
+        } catch (error) {
+            console.error("Error getting food trace:", error);
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         checkIfWalletIsConnected();
         fetchAllCrops(); // Fetch all crops on load
         fetchAllFoodItems(); // Fetch all food items on load
         fetchAllDistributions(); // Fetch all distributions on load
+        getAllUsers();
     }, []);
 
     return (
@@ -278,7 +296,10 @@ export const Web3ContextProvider = ({ children }) => {
                 foodTrace,
                 loading,
                 fetchPendingUsers,
-                signupLoading
+                signupLoading,
+                getAllUsers,
+                allUsers,
+                fetchPendingUsers,
             }}
         >
             {children}

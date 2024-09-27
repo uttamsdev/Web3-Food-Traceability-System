@@ -1,5 +1,6 @@
 'use client'
 import AllUsersTable from '@/components/tables/AllUsersTable'
+import PendingUsersTable from '@/components/tables/PendingUsersTable'
 import Breadcrumb from '@/components/utils/Breadcrumb'
 import NoDataFound from '@/components/utils/NoDataFound'
 import { Web3Context } from '@/context/Web3Context'
@@ -7,23 +8,23 @@ import UserLayout from '@/layouts/UserLayout'
 import { Skeleton } from 'antd'
 import React, { useContext, useEffect } from 'react'
 
-const Users = () => {
-    const { loading, allUsers, getAllUsers } = useContext(Web3Context);
-    console.log("users", allUsers);
+const PendingUsers = () => {
+    const { loading, pendingUsers, fetchPendingUsers } = useContext(Web3Context);
+    console.log("pending x", pendingUsers);
 
     useEffect(() => {
-        getAllUsers();
+        fetchPendingUsers()
     }, [])
     return (
         <UserLayout>
-            <Breadcrumb title='All Users' path='Dashboard / All Users' />
+            <Breadcrumb title='Pending Users' path='Dashboard / Pending Users' />
             {
                 loading ? <div className='bg-white px-4 py-4 mt-4'><Skeleton active /> </div> :
-                    allUsers?.length > 0 ? <AllUsersTable users={allUsers} /> : <NoDataFound />
-                    
+                    pendingUsers?.length > 0 ? <PendingUsersTable users={pendingUsers} /> : <NoDataFound />
+
             }
         </UserLayout>
     )
 }
 
-export default Users
+export default PendingUsers

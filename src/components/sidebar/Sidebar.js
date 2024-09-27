@@ -15,10 +15,10 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
   const menus = {
     Admin: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
-      { label: 'Pending Users', path: '/dashboard', icon: <DashboardIcon /> },
-      { label: 'All Crops', path: '/dashboard', icon: <DashboardIcon /> },
-      { label: 'All Foods', path: '/dashboard', icon: <DashboardIcon /> },
-      { label: 'All Distributions', path: '/dashboard', icon: <DashboardIcon /> },
+      { label: 'Pending Users', path: '/pending-users', icon: <DashboardIcon /> },
+      { label: 'Crops List', path: '/dashboard', icon: <DashboardIcon /> },
+      { label: 'Foods List', path: '/dashboard', icon: <DashboardIcon /> },
+      { label: 'Distributions List', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'All Users', path: '/all-users', icon: <DashboardIcon /> },
     ],
     Farmer: [

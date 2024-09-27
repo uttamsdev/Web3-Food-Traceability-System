@@ -61,3 +61,21 @@ table th {
     gap: 8px;
     cursor: pointer;
 }
+
+.status-success {
+    background: #00A86F;
+    color: #fff;
+    border-radius: 16px;
+    padding: 2px 8px;
+    max-width: 80px;
+    text-align: center;
+}
+
+.status-danger {
+    background: #d40a0a;
+    color: #fff;
+    border-radius: 16px;
+    padding: 2px 8px;
+    max-width: 80px;
+    text-align: center;
+}
