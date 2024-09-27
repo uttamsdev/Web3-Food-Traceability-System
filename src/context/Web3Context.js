@@ -3,6 +3,8 @@
 import { ethers } from "ethers";
 import { createContext, useEffect, useState } from "react";
 import { contractABI, contractAddress } from '../components/utils/Constant'; // Update the correct path
+import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 // Check if window.ethereum exists
 const { ethereum } = typeof window !== 'undefined' ? window : {};
@@ -20,6 +22,8 @@ export const Web3ContextProvider = ({ children }) => {
     const [foodItems, setFoodItems] = useState([]); // Store list of food items
     const [distributions, setDistributions] = useState([]); // Store list of distributions
     const [foodTrace, setFoodTrace] = useState(null); // Store food trace data
+    const router = useRouter();
+    const [signupLoading, setSignupLoading] = useState(false);
 
     // Create a connection to the smart contract
     const createEthereumContract = () => {
@@ -50,6 +54,7 @@ export const Web3ContextProvider = ({ children }) => {
             if (accounts.length) {
                 setCurrentAccount(accounts[0]);
                 await checkUserStatus(accounts[0]); // Check active status and role
+                currentAccount && router.push('/dashboard')
             }
         } catch (error) {
             console.error("Error checking wallet connection:", error);
@@ -92,10 +97,19 @@ export const Web3ContextProvider = ({ children }) => {
     // Register a user in the smart contract
     const registerUser = async (name, role) => {
         try {
+            setSignupLoading(true);
             const contract = createEthereumContract();
             const transaction = await contract.signUp(name, role);
             await transaction.wait();
             console.log("User registered:", transaction);
+            setSignupLoading(false);
+            router.push('/dashboard');
+            Swal.fire({
+                title: "Account Created!",
+                text: "Your account Successfully Created.",
+                icon: "success"
+            });
+
         } catch (error) {
             console.error("Error registering user:", error);
         }
@@ -264,6 +278,7 @@ export const Web3ContextProvider = ({ children }) => {
                 foodTrace,
                 loading,
                 fetchPendingUsers,
+                signupLoading
             }}
         >
             {children}

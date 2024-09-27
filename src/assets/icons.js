@@ -23,3 +23,187 @@ export const TwitterIcon = () => {
         </svg>
     )
 }
+
+export const SmallCloseIcn = () => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="#FFFFFF"
+            class="size-6"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18 18 6M6 6l12 12"
+            />
+        </svg>
+    );
+};
+
+export const DashboardIcon = () => {
+    return (
+        <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M16 5C16 4.06812 16 3.60218 16.1522 3.23463C16.3552 2.74458 16.7446 2.35523 17.2346 2.15224C17.6022 2 18.0681 2 19 2C19.9319 2 20.3978 2 20.7654 2.15224C21.2554 2.35523 21.6448 2.74458 21.8478 3.23463C22 3.60218 22 4.06812 22 5V9C22 9.93188 22 10.3978 21.8478 10.7654C21.6448 11.2554 21.2554 11.6448 20.7654 11.8478C20.3978 12 19.9319 12 19 12C18.0681 12 17.6022 12 17.2346 11.8478C16.7446 11.6448 16.3552 11.2554 16.1522 10.7654C16 10.3978 16 9.93188 16 9V5Z"
+                stroke="black"
+                stroke-width="1.5"
+            />
+            <path
+                d="M16 19C16 18.0681 16 17.6022 16.1522 17.2346C16.3552 16.7446 16.7446 16.3552 17.2346 16.1522C17.6022 16 18.0681 16 19 16C19.9319 16 20.3978 16 20.7654 16.1522C21.2554 16.3552 21.6448 16.7446 21.8478 17.2346C22 17.6022 22 18.0681 22 19C22 19.9319 22 20.3978 21.8478 20.7654C21.6448 21.2554 21.2554 21.6448 20.7654 21.8478C20.3978 22 19.9319 22 19 22C18.0681 22 17.6022 22 17.2346 21.8478C16.7446 21.6448 16.3552 21.2554 16.1522 20.7654C16 20.3978 16 19.9319 16 19Z"
+                stroke="black"
+                stroke-width="1.5"
+            />
+            <path
+                d="M2 16C2 14.1144 2 13.1716 2.58579 12.5858C3.17157 12 4.11438 12 6 12H8C9.88562 12 10.8284 12 11.4142 12.5858C12 13.1716 12 14.1144 12 16V18C12 19.8856 12 20.8284 11.4142 21.4142C10.8284 22 9.88562 22 8 22H6C4.11438 22 3.17157 22 2.58579 21.4142C2 20.8284 2 19.8856 2 18V16Z"
+                stroke="black"
+                stroke-width="1.5"
+            />
+            <path
+                d="M2 5C2 4.06812 2 3.60218 2.15224 3.23463C2.35523 2.74458 2.74458 2.35523 3.23463 2.15224C3.60218 2 4.06812 2 5 2H9C9.93188 2 10.3978 2 10.7654 2.15224C11.2554 2.35523 11.6448 2.74458 11.8478 3.23463C12 3.60218 12 4.06812 12 5C12 5.93188 12 6.39782 11.8478 6.76537C11.6448 7.25542 11.2554 7.64477 10.7654 7.84776C10.3978 8 9.93188 8 9 8H5C4.06812 8 3.60218 8 3.23463 7.84776C2.74458 7.64477 2.35523 7.25542 2.15224 6.76537C2 6.39782 2 5.93188 2 5Z"
+                stroke="black"
+                stroke-width="1.5"
+            />
+        </svg>
+    );
+};
+
+export const SearchIcon = () => {
+    return (
+        <svg
+            width="22"
+            height="22"
+            viewBox="0 0 22 22"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M16.5 16.5L21 21"
+                stroke="black"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            />
+            <path
+                d="M19 10C19 5.02944 14.9706 1 10 1C5.02944 1 1 5.02944 1 10C1 14.9706 5.02944 19 10 19C14.9706 19 19 14.9706 19 10Z"
+                stroke="black"
+                stroke-width="1.5"
+                stroke-linejoin="round"
+            />
+        </svg>
+    );
+};
+
+export const NotificationIcn = () => {
+    return (
+        <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <circle cx="17" cy="5" r="3" stroke="black" stroke-width="1.5" />
+            <path
+                d="M11.0717 4.06934C8.26334 4.49333 6.01734 6.81279 5.67964 9.79388L5.33476 12.8383C5.24906 13.5948 4.94246 14.3067 4.45549 14.8799C3.42209 16.0962 4.26081 17.9998 5.83014 17.9998H18.1699C19.7392 17.9998 20.5779 16.0962 19.5445 14.8799C19.0575 14.3067 18.7509 13.5948 18.6652 12.8383L18.4373 10.8266"
+                stroke="black"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            />
+            <path
+                d="M15 20C14.5633 21.1652 13.385 22 12 22C10.615 22 9.43668 21.1652 9 20"
+                stroke="black"
+                stroke-width="1.5"
+                stroke-linecap="round"
+            />
+        </svg>
+    );
+};
+
+export const BigSearchIcon = () => {
+    return (
+        <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M18.5 18.5L22 22M21 11.5C21 6.25329 16.7467 2 11.5 2C6.25329 2 2 6.25329 2 11.5C2 16.7467 6.25329 21 11.5 21C16.7467 21 21 16.7467 21 11.5Z"
+                stroke="black"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            />
+        </svg>
+    );
+};
+
+export const ArrowDownIcn = () => {
+    return (
+        <svg
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <path
+                d="M5.8335 8.33325L10.0002 11.6666L14.1668 8.33325"
+                stroke="black"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+            />
+        </svg>
+    );
+};
+
+export const BarsIcon = () => {
+    return (
+        <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-6"
+        >
+            <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+            />
+        </svg>
+    );
+};
+
+export const TableArrowDown = () => {
+    return (
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          fill-rule="evenodd"
+          clip-rule="evenodd"
+          d="M2.82763 5.16266C3.04198 4.94627 3.38947 4.94479 3.60382 5.16415L8.38822 10.0482C8.60257 10.2668 8.60184 10.62 8.38676 10.8371C8.27995 10.945 8.13949 11 7.99976 11C7.85857 11 7.71811 10.945 7.6113 10.8357L2.8269 5.95163C2.61255 5.73301 2.61328 5.3798 2.82763 5.16266ZM12.3951 5.16423C12.6095 4.94486 12.957 4.94635 13.1713 5.16274C13.3864 5.37987 13.3871 5.73309 13.1735 5.95171L9.99634 9.19533C9.88953 9.30464 9.74834 9.35967 9.60788 9.35967C9.46815 9.35967 9.32769 9.30464 9.22088 9.19682C9.00581 8.97969 9.00507 8.62647 9.21869 8.40785L12.3951 5.16423Z"
+          fill="#797B82"
+        />
+      </svg>
+    );
+  };
+  
