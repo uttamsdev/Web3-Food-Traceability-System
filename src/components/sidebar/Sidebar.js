@@ -22,8 +22,8 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
       { label: 'All Users', path: '/all-users', icon: <DashboardIcon /> },
     ],
     Farmer: [
-      { label: 'Add Crops', path: '/farmer/add-crops' },
-      { label: 'View Crops', path: '/farmer/view-crops' },
+      { label: 'Add Crops', path: '/add-crops', icon: <DashboardIcon /> }, ,
+      { label: 'View Crops', path: '/view-crops', icon: <DashboardIcon /> }, ,
     ],
     Producer: [
       { label: 'Create Food Item', path: '/producer/create-food' },

@@ -155,10 +155,18 @@ export const Web3ContextProvider = ({ children }) => {
     // Farmer adds a crop
     const addCrop = async (cropName, location, startDate, endDate, price, quantity) => {
         try {
+            setLoading(true);
             const contract = createEthereumContract();
             const transaction = await contract.addCrop(cropName, location, startDate, endDate, price, quantity);
             await transaction.wait();
             console.log("Crop added:", transaction);
+            setLoading(false);
+            Swal.fire({
+                title: "Crop Added🎉",
+                text: "Your crop successfully added.",
+                icon: "success"
+            });
+            router.push('/view-crops')
         } catch (error) {
             console.error("Error adding crop:", error);
         }
@@ -273,7 +281,6 @@ export const Web3ContextProvider = ({ children }) => {
 
     useEffect(() => {
         checkIfWalletIsConnected();
-        fetchAllCrops(); // Fetch all crops on load
         fetchAllFoodItems(); // Fetch all food items on load
         fetchAllDistributions(); // Fetch all distributions on load
         getAllUsers();
@@ -308,7 +315,8 @@ export const Web3ContextProvider = ({ children }) => {
                 getAllUsers,
                 allUsers,
                 fetchPendingUsers,
-                approveLoading
+                approveLoading,
+                fetchAllCrops
             }}
         >
             {children}
