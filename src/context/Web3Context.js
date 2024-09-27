@@ -25,6 +25,7 @@ export const Web3ContextProvider = ({ children }) => {
     const router = useRouter();
     const [signupLoading, setSignupLoading] = useState(false);
     const [allUsers, setAllUsers] = useState();
+    const [approveLoading, setApproveLoading] = useState(false);
 
     // Create a connection to the smart contract
     const createEthereumContract = () => {
@@ -134,11 +135,18 @@ export const Web3ContextProvider = ({ children }) => {
     // Admin approves a user
     const approveUser = async (userAddress) => {
         try {
+            setApproveLoading(true);
             const contract = createEthereumContract();
             const transaction = await contract.approveUser(userAddress);
             await transaction.wait();
             await fetchPendingUsers(); // Update pending users list after approval
+            setApproveLoading(false);
             console.log("User approved:", transaction);
+            Swal.fire({
+                title: "Account Approved! 🎉",
+                text: "Your account approval successful",
+                icon: "success"
+            });
         } catch (error) {
             console.error("Error approving user:", error);
         }
@@ -300,6 +308,7 @@ export const Web3ContextProvider = ({ children }) => {
                 getAllUsers,
                 allUsers,
                 fetchPendingUsers,
+                approveLoading
             }}
         >
             {children}

@@ -42,12 +42,8 @@ const Navbar = ({ setSidebar }) => {
         />
     );
     return (
-        <div className={`w-full pl-4 md:pl-[30px] py-2.5 md:py-4 pr-4 md:pr-[57px] flex gap-3 justify-between bg-white !sticky !top-0 z-[99] `}>
+        <div className={`w-full pl-4 md:pl-[30px] py-2.5 md:py-4 pr-4 md:pr-[57px] flex gap-3 justify-end bg-white !sticky !top-0 z-[99] `}>
             <span onClick={() => setSidebar(prev => !prev)} className="flex items-center justify-center md:hidden"><BarsIcon/></span>
-            <div className='hidden md:flex items-center gap-2.5 py-[8px] px-4 rounded-[10px] border  max-w-[350px] lg:max-w-[515px] w-full border-primary-border'>
-                <span><SearchIcon /></span>
-                <input type='text' className='w-full text-base text-primary' placeholder='Search' />
-            </div>
 
             <div className='flex items-center gap-4 relative'>
                 <div className='flex items-center gap-4 Navbar-icon'>

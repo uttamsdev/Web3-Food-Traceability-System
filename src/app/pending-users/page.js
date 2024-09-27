@@ -9,7 +9,7 @@ import { Skeleton } from 'antd'
 import React, { useContext, useEffect } from 'react'
 
 const PendingUsers = () => {
-    const { loading, pendingUsers, fetchPendingUsers } = useContext(Web3Context);
+    const { loading, approveLoading, approveUser, pendingUsers, fetchPendingUsers } = useContext(Web3Context);
     console.log("pending x", pendingUsers);
 
     useEffect(() => {
@@ -20,7 +20,7 @@ const PendingUsers = () => {
             <Breadcrumb title='Pending Users' path='Dashboard / Pending Users' />
             {
                 loading ? <div className='bg-white px-4 py-4 mt-4'><Skeleton active /> </div> :
-                    pendingUsers?.length > 0 ? <PendingUsersTable users={pendingUsers} /> : <NoDataFound />
+                    pendingUsers?.length > 0 ? <PendingUsersTable users={pendingUsers} approveLoading={approveLoading} approveUser={approveUser}/> : <NoDataFound />
 
             }
         </UserLayout>
