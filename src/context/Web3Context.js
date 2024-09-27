@@ -17,6 +17,9 @@ export const Web3ContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(false); // Loading state for contract interaction
     const [pendingUsers, setPendingUsers] = useState([]); // Track pending users
     const [crops, setCrops] = useState([]); // Store list of crops
+    const [foodItems, setFoodItems] = useState([]); // Store list of food items
+    const [distributions, setDistributions] = useState([]); // Store list of distributions
+    const [foodTrace, setFoodTrace] = useState(null); // Store food trace data
 
     // Create a connection to the smart contract
     const createEthereumContract = () => {
@@ -137,7 +140,7 @@ export const Web3ContextProvider = ({ children }) => {
         }
     };
 
-    // Fetch all crops (for Admin view)
+    // Fetch all crops
     const fetchAllCrops = async () => {
         try {
             setLoading(true);
@@ -163,15 +166,43 @@ export const Web3ContextProvider = ({ children }) => {
         }
     };
 
+    // Fetch all food items
+    const fetchAllFoodItems = async () => {
+        try {
+            setLoading(true);
+            const contract = createEthereumContract();
+            const items = await contract.getAllFoodItems();
+            setFoodItems(items);
+            setLoading(false);
+        } catch (error) {
+            console.error("Error fetching food items:", error);
+            setLoading(false);
+        }
+    };
+
     // Distributor adds distribution details
-    const addDistribution = async (foodId, distributorName, cropIds, location, receivedDate, sendDate, price, quantity, expireDate) => {
+    const addDistribution = async (foodId, location, receivedDate, sendDate, price, quantity, expireDate) => {
         try {
             const contract = createEthereumContract();
-            const transaction = await contract.addDistribution(foodId, distributorName, cropIds, location, receivedDate, sendDate, price, quantity, expireDate);
+            const transaction = await contract.addDistribution(foodId, location, receivedDate, sendDate, price, quantity, expireDate);
             await transaction.wait();
             console.log("Distribution added:", transaction);
         } catch (error) {
             console.error("Error adding distribution:", error);
+        }
+    };
+
+    // Fetch all distributions
+    const fetchAllDistributions = async () => {
+        try {
+            setLoading(true);
+            const contract = createEthereumContract();
+            const distributions = await contract.getAllDistributions();
+            setDistributions(distributions);
+            setLoading(false);
+        } catch (error) {
+            console.error("Error fetching distributions:", error);
+            setLoading(false);
         }
     };
 
@@ -187,8 +218,25 @@ export const Web3ContextProvider = ({ children }) => {
         }
     };
 
+    // Function to trace food items
+    const getFoodTrace = async (foodId) => {
+        try {
+            setLoading(true);
+            const contract = createEthereumContract();
+            const traceData = await contract.getFoodTrace(foodId);
+            setFoodTrace(traceData);
+            setLoading(false);
+        } catch (error) {
+            console.error("Error getting food trace:", error);
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         checkIfWalletIsConnected();
+        fetchAllCrops(); // Fetch all crops on load
+        fetchAllFoodItems(); // Fetch all food items on load
+        fetchAllDistributions(); // Fetch all distributions on load
     }, []);
 
     return (
@@ -203,13 +251,19 @@ export const Web3ContextProvider = ({ children }) => {
                 registerUser,
                 approveUser,
                 addCrop,
-                addFoodItem,
-                addDistribution,
-                addRetailEntry,
-                fetchPendingUsers,
                 fetchAllCrops,
                 crops,
+                addFoodItem,
+                fetchAllFoodItems,
+                foodItems,
+                addDistribution,
+                fetchAllDistributions,
+                distributions,
+                addRetailEntry,
+                getFoodTrace,
+                foodTrace,
                 loading,
+                fetchPendingUsers,
             }}
         >
             {children}

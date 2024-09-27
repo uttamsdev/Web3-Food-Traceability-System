@@ -6,7 +6,11 @@ import { useContext } from "react";
 import { Web3Context } from "@/context/Web3Context";
 
 export default function Home() {
-  const { connectWallet } = useContext(Web3Context)
+  const { isActive, userRole, currentAccount, connectWallet } = useContext(Web3Context);
+
+  console.log("current account", currentAccount);
+  console.log("isActive", isActive);
+  console.log('UserRole', userRole);
   return (
     <div className="flex flex-col min-h-screen font-sans bg-gray-50">
       {/* Navbar */}
@@ -18,7 +22,9 @@ export default function Home() {
             <li><a href="#about" className="hover:text-green-400 transition duration-200">About</a></li>
             <li><a href="#roles" className="hover:text-green-400 transition duration-200">Roles</a></li>
             <li><a href="#contact" className="hover:text-green-400 transition duration-200">Contact</a></li>
-            <li><button onClick={connectWallet} href="#contact" className=" bg-yellow-600 px-1.5 py-1 rounded transition duration-200 active:scale-90">Connect Wallet</button></li>
+            {
+              !currentAccount && <li><button onClick={connectWallet} href="#contact" className=" bg-yellow-600 px-1.5 py-1 rounded transition duration-200 active:scale-90">Connect Wallet</button></li>
+            }
           </ul>
         </nav>
       </header>
