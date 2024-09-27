@@ -27,9 +27,9 @@
 				"type": "uint256"
 			},
 			{
-				"internalType": "uint256",
+				"internalType": "string",
 				"name": "_quantity",
-				"type": "uint256"
+				"type": "string"
 			}
 		],
 		"name": "addCrop",
@@ -43,16 +43,6 @@
 				"internalType": "uint256",
 				"name": "_foodId",
 				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "_distributorName",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256[]",
-				"name": "_cropIds",
-				"type": "uint256[]"
 			},
 			{
 				"internalType": "string",
@@ -200,6 +190,24 @@
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "enum FoodTraceabilitySystem.Role",
+				"name": "_role",
+				"type": "uint8"
+			}
+		],
+		"name": "signUp",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"stateMutability": "nonpayable",
 		"type": "constructor"
@@ -240,9 +248,9 @@
 			},
 			{
 				"indexed": false,
-				"internalType": "string",
-				"name": "foodName",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "foodId",
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
@@ -290,9 +298,9 @@
 			},
 			{
 				"indexed": false,
-				"internalType": "string",
-				"name": "foodName",
-				"type": "string"
+				"internalType": "uint256",
+				"name": "foodId",
+				"type": "uint256"
 			},
 			{
 				"indexed": false,
@@ -303,24 +311,6 @@
 		],
 		"name": "RetailerEntryAdded",
 		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "enum FoodTraceabilitySystem.Role",
-				"name": "_role",
-				"type": "uint8"
-			}
-		],
-		"name": "signUp",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
 	},
 	{
 		"anonymous": false,
@@ -367,19 +357,6 @@
 		"type": "event"
 	},
 	{
-		"inputs": [],
-		"name": "cropCounter",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -387,7 +364,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "crops",
+		"name": "allCrops",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -420,27 +397,14 @@
 				"type": "uint256"
 			},
 			{
-				"internalType": "uint256",
+				"internalType": "string",
 				"name": "quantity",
-				"type": "uint256"
+				"type": "string"
 			},
 			{
 				"internalType": "address",
 				"name": "farmer",
 				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "distributionCounter",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -454,7 +418,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "distributions",
+		"name": "allDistributions",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -462,19 +426,9 @@
 				"type": "uint256"
 			},
 			{
-				"internalType": "string",
-				"name": "distributorName",
-				"type": "string"
-			},
-			{
 				"internalType": "uint256",
 				"name": "foodId",
 				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "foodName",
-				"type": "string"
 			},
 			{
 				"internalType": "string",
@@ -511,19 +465,6 @@
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"name": "foodItemCounter",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "uint256",
@@ -531,7 +472,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "foodItems",
+		"name": "allFoodItems",
 		"outputs": [
 			{
 				"internalType": "uint256",
@@ -561,6 +502,65 @@
 			{
 				"internalType": "string",
 				"name": "endDate",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "price",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "quantity",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "expireDate",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "allRetailEntries",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "retailerId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "foodId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "distributorId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "string",
+				"name": "location",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "receivedDate",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "sellDate",
 				"type": "string"
 			},
 			{
@@ -619,9 +619,9 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "uint256",
+						"internalType": "string",
 						"name": "quantity",
-						"type": "uint256"
+						"type": "string"
 					},
 					{
 						"internalType": "address",
@@ -630,6 +630,161 @@
 					}
 				],
 				"internalType": "struct FoodTraceabilitySystem.Crop[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllDistributions",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "distributorId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "foodId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "location",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "receivedDate",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "sendDate",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "expireDate",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FoodTraceabilitySystem.Distribution[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllFoodItems",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "foodId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "foodName",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256[]",
+						"name": "cropIds",
+						"type": "uint256[]"
+					},
+					{
+						"internalType": "address",
+						"name": "producer",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "location",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "startDate",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "endDate",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "quantity",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "expireDate",
+						"type": "string"
+					}
+				],
+				"internalType": "struct FoodTraceabilitySystem.FoodItem[]",
+				"name": "",
+				"type": "tuple[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getAllUsers",
+		"outputs": [
+			{
+				"components": [
+					{
+						"internalType": "address",
+						"name": "wallet",
+						"type": "address"
+					},
+					{
+						"internalType": "string",
+						"name": "name",
+						"type": "string"
+					},
+					{
+						"internalType": "uint8",
+						"name": "role",
+						"type": "uint8"
+					},
+					{
+						"internalType": "bool",
+						"name": "isActive",
+						"type": "bool"
+					}
+				],
+				"internalType": "struct FoodTraceabilitySystem.User[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -712,24 +867,9 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "string",
-						"name": "distributorName",
-						"type": "string"
-					},
-					{
 						"internalType": "uint256",
 						"name": "foodId",
 						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "foodName",
-						"type": "string"
-					},
-					{
-						"internalType": "uint256[]",
-						"name": "cropIds",
-						"type": "uint256[]"
 					},
 					{
 						"internalType": "string",
@@ -774,29 +914,14 @@
 						"type": "uint256"
 					},
 					{
-						"internalType": "string",
-						"name": "retailerName",
-						"type": "string"
-					},
-					{
 						"internalType": "uint256",
 						"name": "foodId",
 						"type": "uint256"
 					},
 					{
-						"internalType": "string",
-						"name": "foodName",
-						"type": "string"
-					},
-					{
 						"internalType": "uint256",
 						"name": "distributorId",
 						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "distributorName",
-						"type": "string"
 					},
 					{
 						"internalType": "string",
@@ -832,6 +957,53 @@
 				"internalType": "struct FoodTraceabilitySystem.Retail",
 				"name": "",
 				"type": "tuple"
+			},
+			{
+				"components": [
+					{
+						"internalType": "uint256",
+						"name": "cropId",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "cropName",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "location",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "farmingStartDate",
+						"type": "string"
+					},
+					{
+						"internalType": "string",
+						"name": "farmingEndDate",
+						"type": "string"
+					},
+					{
+						"internalType": "uint256",
+						"name": "price",
+						"type": "uint256"
+					},
+					{
+						"internalType": "string",
+						"name": "quantity",
+						"type": "string"
+					},
+					{
+						"internalType": "address",
+						"name": "farmer",
+						"type": "address"
+					}
+				],
+				"internalType": "struct FoodTraceabilitySystem.Crop[]",
+				"name": "",
+				"type": "tuple[]"
 			}
 		],
 		"stateMutability": "view",
@@ -854,12 +1026,17 @@
 						"type": "string"
 					},
 					{
-						"internalType": "enum FoodTraceabilitySystem.Role",
+						"internalType": "uint8",
 						"name": "role",
 						"type": "uint8"
+					},
+					{
+						"internalType": "bool",
+						"name": "isActive",
+						"type": "bool"
 					}
 				],
-				"internalType": "struct FoodTraceabilitySystem.PendingUser[]",
+				"internalType": "struct FoodTraceabilitySystem.User[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -888,12 +1065,12 @@
 	},
 	{
 		"inputs": [],
-		"name": "retailerCounter",
+		"name": "systemAdmin",
 		"outputs": [
 			{
-				"internalType": "uint256",
+				"internalType": "address",
 				"name": "",
-				"type": "uint256"
+				"type": "address"
 			}
 		],
 		"stateMutability": "view",
@@ -907,75 +1084,7 @@
 				"type": "uint256"
 			}
 		],
-		"name": "retailers",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "retailerId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "retailerName",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "foodId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "foodName",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "distributorId",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "distributorName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "location",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "receivedDate",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "sellDate",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "price",
-				"type": "uint256"
-			},
-			{
-				"internalType": "uint256",
-				"name": "quantity",
-				"type": "uint256"
-			},
-			{
-				"internalType": "string",
-				"name": "expireDate",
-				"type": "string"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "systemAdmin",
+		"name": "userAddresses",
 		"outputs": [
 			{
 				"internalType": "address",
@@ -1007,7 +1116,7 @@
 				"type": "string"
 			},
 			{
-				"internalType": "enum FoodTraceabilitySystem.Role",
+				"internalType": "uint8",
 				"name": "role",
 				"type": "uint8"
 			},
