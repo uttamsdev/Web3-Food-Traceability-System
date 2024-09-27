@@ -1,5 +1,7 @@
+
 import localFont from "next/font/local";
 import "./globals.css";
+import { Web3ContextProvider } from "@/context/Web3Context";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -23,7 +25,9 @@ export default function RootLayout({ children }) {
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <Web3ContextProvider>
+          {children}
+        </Web3ContextProvider>
       </body>
     </html>
   );
