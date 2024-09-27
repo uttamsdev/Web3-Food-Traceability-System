@@ -1,19 +1,24 @@
+'use client'
 import { FacebookIcon, LinkedIcon, TwitterIcon } from "@/assets/icons";
 import Image from "next/image";
 import FoodImage from '@/assets/food2.jpg';
+import { useContext } from "react";
+import { Web3Context } from "@/context/Web3Context";
 
 export default function Home() {
+  const { connectWallet } = useContext(Web3Context)
   return (
     <div className="flex flex-col min-h-screen font-sans bg-gray-50">
       {/* Navbar */}
       <header className="bg-black opacity-90 text-white shadow-lg">
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
           <div className="text-4xl font-extrabold tracking-widest">FoodTrace</div>
-          <ul className="flex space-x-8 text-lg font-semibold">
+          <ul className="flex space-x-8 text-lg font-semibold items-center">
             <li><a href="#home" className="hover:text-green-400 transition duration-200">Home</a></li>
             <li><a href="#about" className="hover:text-green-400 transition duration-200">About</a></li>
             <li><a href="#roles" className="hover:text-green-400 transition duration-200">Roles</a></li>
             <li><a href="#contact" className="hover:text-green-400 transition duration-200">Contact</a></li>
+            <li><button onClick={connectWallet} href="#contact" className=" bg-yellow-600 px-1.5 py-1 rounded transition duration-200 active:scale-90">Connect Wallet</button></li>
           </ul>
         </nav>
       </header>

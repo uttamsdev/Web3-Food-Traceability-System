@@ -10,24 +10,18 @@ contract FoodTraceabilitySystem {
     struct User {
         address wallet;
         string name;
-        Role role;
+        uint8 role; // Using uint8 for smaller size
         bool isActive;
-    }
-
-    struct PendingUser {
-        address wallet;
-        string name;
-        Role role;
     }
 
     struct Crop {
         uint256 cropId;
         string cropName;
         string location;
-        string farmingStartDate;  // Changed to string
-        string farmingEndDate;    // Changed to string
+        string farmingStartDate; // String for date
+        string farmingEndDate;   // String for date
         uint256 price;
-        uint256 quantity;
+        string quantity;         // Numeric quantity
         address farmer;
     }
 
@@ -37,40 +31,34 @@ contract FoodTraceabilitySystem {
         uint256[] cropIds; // Multiple crops used to create this food
         address producer;
         string location;
-        string startDate;  // Changed to string
-        string endDate;    // Changed to string
+        string startDate;        // String for date
+        string endDate;          // String for date
         uint256 price;
-        uint256 quantity;
-        string expireDate; // Changed to string
+        uint256 quantity;         // Numeric quantity
+        string expireDate;       // String for date
     }
 
     struct Distribution {
         uint256 distributorId;
-        string distributorName;
         uint256 foodId;
-        string foodName;
-        uint256[] cropIds;
         string location;
-        string receivedDate;  // Changed to string
-        string sendDate;      // Changed to string
+        string receivedDate;     // String for date
+        string sendDate;         // String for date
         uint256 price;
-        uint256 quantity;
-        string expireDate;    // Changed to string
+        uint256 quantity;         // Numeric quantity
+        string expireDate;       // String for date
     }
 
     struct Retail {
         uint256 retailerId;
-        string retailerName;
         uint256 foodId;
-        string foodName;
         uint256 distributorId;
-        string distributorName;
         string location;
-        string receivedDate;  // Changed to string
-        string sellDate;      // Changed to string
+        string receivedDate;     // String for date
+        string sellDate;         // String for date
         uint256 price;
-        uint256 quantity;
-        string expireDate;    // Changed to string
+        uint256 quantity;         // Numeric quantity
+        string expireDate;       // String for date
     }
 
     // Admin
@@ -78,29 +66,28 @@ contract FoodTraceabilitySystem {
 
     // Mappings
     mapping(address => User) public users; // Registered users
-    mapping(uint256 => Crop) public crops;
-    mapping(uint256 => FoodItem) public foodItems;
-    mapping(uint256 => Distribution) public distributions;
-    mapping(uint256 => Retail) public retailers;
+    address[] public userAddresses; // To keep track of all user addresses
 
-    // Track users' status
+    // Store all crops, food items, distributions, and retailers
+    Crop[] public allCrops;
+    FoodItem[] public allFoodItems;
+    Distribution[] public allDistributions;
+    Retail[] public allRetailEntries;
+
+    // Pending users
     address[] public pendingUsers;  // List of users waiting for approval
-    uint256 public cropCounter;
-    uint256 public foodItemCounter;
-    uint256 public distributionCounter;
-    uint256 public retailerCounter;
 
     // Events
     event UserRegistered(address user, string name, Role role);
     event UserApproved(address user, string name);
     event CropAdded(uint256 cropId, string cropName, address farmer);
     event FoodItemAdded(uint256 foodId, string foodName, address producer);
-    event DistributionAdded(uint256 distributionId, string foodName, address distributor);
-    event RetailerEntryAdded(uint256 retailerId, string foodName, address retailer);
+    event DistributionAdded(uint256 distributionId, uint256 foodId, address distributor);
+    event RetailerEntryAdded(uint256 retailerId, uint256 foodId, address retailer);
 
     // Modifiers
     modifier onlyAdmin() {
-        require(users[msg.sender].role == Role.Admin, "Only Admin can perform this action");
+        require(users[msg.sender].role == uint8(Role.Admin), "Only Admin can perform this action");
         _;
     }
 
@@ -109,50 +96,24 @@ contract FoodTraceabilitySystem {
         _;
     }
 
-    modifier onlyFarmer() {
-        require(users[msg.sender].role == Role.Farmer, "Only Farmer can perform this action");
-        _;
-    }
-
-    modifier onlyProducer() {
-        require(users[msg.sender].role == Role.Producer, "Only Producer can perform this action");
-        _;
-    }
-
-    modifier onlyDistributor() {
-        require(users[msg.sender].role == Role.Distributor, "Only Distributor can perform this action");
-        _;
-    }
-
-    modifier onlyRetailer() {
-        require(users[msg.sender].role == Role.Retailer, "Only Retailer can perform this action");
+    modifier onlyRole(Role _role) {
+        require(users[msg.sender].role == uint8(_role), "Invalid role for this action");
         _;
     }
 
     constructor() {
         systemAdmin = msg.sender;
-        users[systemAdmin] = User(systemAdmin, "System Admin", Role.Admin, true);
+        users[systemAdmin] = User(systemAdmin, "System Admin", uint8(Role.Admin), true);
+        userAddresses.push(systemAdmin); // Store admin address
     }
 
     // Sign up function - User signs up with role and waits for admin approval
     function signUp(string memory _name, Role _role) public {
         require(users[msg.sender].wallet == address(0), "User already exists");
-        users[msg.sender] = User(msg.sender, _name, _role, false);
+        users[msg.sender] = User(msg.sender, _name, uint8(_role), false);
+        userAddresses.push(msg.sender); // Add to user addresses
         pendingUsers.push(msg.sender); // Add to pending user list
         emit UserRegistered(msg.sender, _name, _role);
-    }
-
-    // Admin retrieves list of pending users for approval, along with their name and role
-    function getPendingUsers() public view onlyAdmin returns (PendingUser[] memory) {
-        PendingUser[] memory pendingUserList = new PendingUser[](pendingUsers.length);
-
-        for (uint256 i = 0; i < pendingUsers.length; i++) {
-            address userAddress = pendingUsers[i];
-            User memory user = users[userAddress];
-            pendingUserList[i] = PendingUser(user.wallet, user.name, user.role);
-        }
-
-        return pendingUserList;
     }
 
     // Admin approves user
@@ -174,48 +135,120 @@ contract FoodTraceabilitySystem {
         emit UserApproved(_user, users[_user].name);
     }
 
+    // Get the list of pending users with address, name, and role
+    function getPendingUsers() public view returns (User[] memory) {
+        User[] memory pendingUserList = new User[](pendingUsers.length);
+
+        for (uint256 i = 0; i < pendingUsers.length; i++) {
+            pendingUserList[i] = users[pendingUsers[i]];
+        }
+
+        return pendingUserList;
+    }
+
+    // Get a list of all users with their details
+    function getAllUsers() public view returns (User[] memory) {
+        User[] memory allUsers = new User[](userAddresses.length);
+
+        for (uint256 i = 0; i < userAddresses.length; i++) {
+            allUsers[i] = users[userAddresses[i]];
+        }
+
+        return allUsers;
+    }
+
     // Farmer adds crops
-    function addCrop(string memory _cropName, string memory _location, string memory _farmingStartDate, string memory _farmingEndDate, uint256 _price, uint256 _quantity) public onlyActiveUser onlyFarmer {
-        cropCounter++;
-        crops[cropCounter] = Crop(cropCounter, _cropName, _location, _farmingStartDate, _farmingEndDate, _price, _quantity, msg.sender);
-        emit CropAdded(cropCounter, _cropName, msg.sender);
+    function addCrop(
+        string memory _cropName,
+        string memory _location,
+        string memory _farmingStartDate,
+        string memory _farmingEndDate,
+        uint256 _price,
+        string memory _quantity
+    ) public onlyActiveUser onlyRole(Role.Farmer) {
+        uint256 cropId = allCrops.length + 1;
+        Crop memory newCrop = Crop(cropId, _cropName, _location, _farmingStartDate, _farmingEndDate, _price, _quantity, msg.sender);
+        allCrops.push(newCrop);
+        emit CropAdded(cropId, _cropName, msg.sender);
     }
 
     // Producer adds a food item using crops
-    function addFoodItem(string memory _foodName, uint256[] memory _cropIds, string memory _location, string memory _startDate, string memory _endDate, uint256 _price, uint256 _quantity, string memory _expireDate) public onlyActiveUser onlyProducer {
-        foodItemCounter++;
-        foodItems[foodItemCounter] = FoodItem(foodItemCounter, _foodName, _cropIds, msg.sender, _location, _startDate, _endDate, _price, _quantity, _expireDate);
-        emit FoodItemAdded(foodItemCounter, _foodName, msg.sender);
+    function addFoodItem(
+        string memory _foodName,
+        uint256[] memory _cropIds,
+        string memory _location,
+        string memory _startDate,
+        string memory _endDate,
+        uint256 _price,
+        uint256 _quantity,
+        string memory _expireDate
+    ) public onlyActiveUser onlyRole(Role.Producer) {
+        uint256 foodId = allFoodItems.length + 1;
+        FoodItem memory newFoodItem = FoodItem(foodId, _foodName, _cropIds, msg.sender, _location, _startDate, _endDate, _price, _quantity, _expireDate);
+        allFoodItems.push(newFoodItem);
+        emit FoodItemAdded(foodId, _foodName, msg.sender);
     }
 
     // Distributor receives food and adds distribution details
-    function addDistribution(uint256 _foodId, string memory _distributorName, uint256[] memory _cropIds, string memory _location, string memory _receivedDate, string memory _sendDate, uint256 _price, uint256 _quantity, string memory _expireDate) public onlyActiveUser onlyDistributor {
-        distributionCounter++;
-        distributions[distributionCounter] = Distribution(distributionCounter, _distributorName, _foodId, foodItems[_foodId].foodName, _cropIds, _location, _receivedDate, _sendDate, _price, _quantity, _expireDate);
-        emit DistributionAdded(distributionCounter, foodItems[_foodId].foodName, msg.sender);
+    function addDistribution(
+        uint256 _foodId,
+        string memory _location,
+        string memory _receivedDate,
+        string memory _sendDate,
+        uint256 _price,
+        uint256 _quantity,
+        string memory _expireDate
+    ) public onlyActiveUser onlyRole(Role.Distributor) {
+        uint256 distributionId = allDistributions.length + 1;
+        Distribution memory newDistribution = Distribution(distributionId, _foodId, _location, _receivedDate, _sendDate, _price, _quantity, _expireDate);
+        allDistributions.push(newDistribution);
+        emit DistributionAdded(distributionId, _foodId, msg.sender);
     }
 
     // Retailer receives food and adds sale details
-    function addRetailEntry(uint256 _foodId, uint256 _distributorId, string memory _location, string memory _receivedDate, string memory _sellDate, uint256 _price, uint256 _quantity, string memory _expireDate) public onlyActiveUser onlyRetailer {
-        retailerCounter++;
-        retailers[retailerCounter] = Retail(retailerCounter, users[msg.sender].name, _foodId, foodItems[_foodId].foodName, _distributorId, distributions[_distributorId].distributorName, _location, _receivedDate, _sellDate, _price, _quantity, _expireDate);
-        emit RetailerEntryAdded(retailerCounter, foodItems[_foodId].foodName, msg.sender);
+    function addRetailEntry(
+        uint256 _foodId,
+        uint256 _distributorId,
+        string memory _location,
+        string memory _receivedDate,
+        string memory _sellDate,
+        uint256 _price,
+        uint256 _quantity,
+        string memory _expireDate
+    ) public onlyActiveUser onlyRole(Role.Retailer) {
+        uint256 retailerId = allRetailEntries.length + 1;
+        Retail memory newRetailEntry = Retail(retailerId, _foodId, _distributorId, _location, _receivedDate, _sellDate, _price, _quantity, _expireDate);
+        allRetailEntries.push(newRetailEntry);
+        emit RetailerEntryAdded(retailerId, _foodId, msg.sender);
     }
 
-    // Admin retrieves list of all crops added by farmers
-    function getAllCrops() public view onlyAdmin returns (Crop[] memory) {
-        Crop[] memory cropList = new Crop[](cropCounter);
-        for (uint256 i = 1; i <= cropCounter; i++) {
-            cropList[i - 1] = crops[i];
+    // Function to view a food trace
+    function getFoodTrace(uint256 _foodId) public view returns (FoodItem memory, Distribution memory, Retail memory, Crop[] memory) {
+        FoodItem memory foodItem = allFoodItems[_foodId - 1];
+        Distribution memory distribution = allDistributions[_foodId - 1];
+        Retail memory retail = allRetailEntries[_foodId - 1];
+        
+        // Get crops related to this food item
+        Crop[] memory associatedCrops = new Crop[](foodItem.cropIds.length);
+        for (uint256 i = 0; i < foodItem.cropIds.length; i++) {
+            associatedCrops[i] = allCrops[foodItem.cropIds[i] - 1];
         }
-        return cropList;
+
+        return (foodItem, distribution, retail, associatedCrops);
     }
 
-    // Function to view a food trace (example function to use with frontend to generate QR code)
-    function getFoodTrace(uint256 _foodId) public view returns (FoodItem memory, Distribution memory, Retail memory) {
-        FoodItem memory foodItem = foodItems[_foodId];
-        Distribution memory distribution = distributions[_foodId];
-        Retail memory retail = retailers[_foodId];
-        return (foodItem, distribution, retail);
+    // Get all crops
+    function getAllCrops() public view returns (Crop[] memory) {
+        return allCrops;
+    }
+
+    // Get all food items
+    function getAllFoodItems() public view returns (FoodItem[] memory) {
+        return allFoodItems;
+    }
+
+    // Get all distributions
+    function getAllDistributions() public view returns (Distribution[] memory) {
+        return allDistributions;
     }
 }
