@@ -29,7 +29,7 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
       { label: 'Add Foods', path: '/add-foods', icon: <DashboardIcon /> },
       { label: 'Foods List', path: '/view-foods', icon: <DashboardIcon /> },
       { label: 'View Crops', path: '/view-crops', icon: <DashboardIcon /> },
-      { label: 'Distributions List', path: '/dashboard', icon: <DashboardIcon /> },
+      { label: 'Distributions List', path: '/view-distributions', icon: <DashboardIcon /> },
 
     ],
     Distributor: [
@@ -38,7 +38,7 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
       { label: 'Distributions List', path: '/view-distributions', icon: <DashboardIcon /> },
     ],
     Retailer: [
-      { label: 'Distributions List', path: '/dashboard', icon: <DashboardIcon /> },
+      { label: 'Distributions List', path: '/view-distributions', icon: <DashboardIcon /> },
       { label: 'Add Retail', path: '/add-retail', icon: <DashboardIcon /> },
       { label: 'Foods List', path: '/view-foods', icon: <DashboardIcon /> },
 

@@ -56,10 +56,12 @@ export const Web3ContextProvider = ({ children }) => {
             if (accounts.length) {
                 setCurrentAccount(accounts[0]);
                 await checkUserStatus(accounts[0]); // Check active status and role
-                currentAccount && router.push('/dashboard')
+                currentAccount && router.push('/dashboard');
+                !currentAccount
             }
         } catch (error) {
             console.error("Error checking wallet connection:", error);
+            Swal.fire("Connect Wallet!", "Please connect your wallet to use this application!", "info");
         }
     };
 
@@ -281,6 +283,7 @@ export const Web3ContextProvider = ({ children }) => {
             const traceData = await contract.getFoodTrace(foodId);
             setFoodTrace(traceData);
             setLoading(false);
+            console.log('trace data:', traceData)
         } catch (error) {
             console.error("Error getting food trace:", error);
             setLoading(false);

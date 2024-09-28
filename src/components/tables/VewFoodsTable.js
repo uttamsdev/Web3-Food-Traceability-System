@@ -2,7 +2,7 @@
 import { TableArrowDown } from '@/assets/icons';
 import React, { useState } from 'react';
 
-const ViewFoodsTable = ({ foods, users, wallet }) => {
+const ViewFoodsTable = ({ foods, users, result = false }) => {
 
     console.log("food from table", foods)
     return (
@@ -25,20 +25,36 @@ const ViewFoodsTable = ({ foods, users, wallet }) => {
                     </thead>
                     <tbody>
                         {
-                            foods?.map((table_data, index) => <tr key={index} className='border-b border-[#EDF2F7] last:border-none'>
-                                <td className="td text-[#131D26] ">{parseInt(table_data?.foodId?._hex, 16)}</td>
-                                <td className="td  text-[#131D26]">{table_data?.foodName}</td>
-                                <td className="td  text-[#131D26]">{table_data?.startDate}</td>
-                                <td className="td  text-[#131D26]">{table_data?.endDate}</td>
-                                <td className="td  text-[#131D26]">{table_data?.location}</td>
-                                <td className="td text-[#131D26]">
-                                    {users?.find(user => user?.wallet === table_data?.producer)?.name || 'Producer not found'}
-                                </td>                                
-                                <td className="td  text-[#131D26]">{parseInt(table_data?.price?._hex, 16)}</td>
-                                <td className="td  text-[#131D26]">{parseInt(table_data?.quantity?._hex, 16)}</td>
-                                <td className="td  text-[#131D26]">{table_data?.expireDate}</td>
+                            !result ?
+                                foods?.map((table_data, index) => <tr key={index} className='border-b border-[#EDF2F7] last:border-none'>
+                                    <td className="td text-[#131D26] ">{parseInt(table_data?.foodId?._hex, 16)}</td>
+                                    <td className="td  text-[#131D26]">{table_data?.foodName}</td>
+                                    <td className="td  text-[#131D26]">{table_data?.startDate}</td>
+                                    <td className="td  text-[#131D26]">{table_data?.endDate}</td>
+                                    <td className="td  text-[#131D26]">{table_data?.location}</td>
+                                    <td className="td text-[#131D26]">
+                                        {users?.find(user => user?.wallet === table_data?.producer)?.name || 'Producer not found'}
+                                    </td>
+                                    <td className="td  text-[#131D26]">{parseInt(table_data?.price?._hex, 16)}</td>
+                                    <td className="td  text-[#131D26]">{parseInt(table_data?.quantity?._hex, 16)}</td>
+                                    <td className="td  text-[#131D26]">{table_data?.expireDate}</td>
 
-                            </tr>)
+                                </tr>)
+                                :
+                                <tr className='border-b border-[#EDF2F7] last:border-none'>
+                                    <td className="td text-[#131D26] ">{parseInt(foods?.foodId?._hex, 16)}</td>
+                                    <td className="td  text-[#131D26]">{foods?.foodName}</td>
+                                    <td className="td  text-[#131D26]">{foods?.startDate}</td>
+                                    <td className="td  text-[#131D26]">{foods?.endDate}</td>
+                                    <td className="td  text-[#131D26]">{foods?.location}</td>
+                                    <td className="td text-[#131D26]">
+                                        {users?.find(user => user?.wallet === foods?.producer)?.name || 'Producer not found'}
+                                    </td>
+                                    <td className="td  text-[#131D26]">{parseInt(foods?.price?._hex, 16)}</td>
+                                    <td className="td  text-[#131D26]">{parseInt(foods?.quantity?._hex, 16)}</td>
+                                    <td className="td  text-[#131D26]">{foods?.expireDate}</td>
+
+                                </tr>
                         }
                     </tbody>
                 </table>
