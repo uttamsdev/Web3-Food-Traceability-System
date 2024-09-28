@@ -24,7 +24,7 @@ const DeleteMsg = ({ setOpen, approveUser, wallet }) => {
 
                 <div>
                     <h1 className='mb-1 text-lg text-primary font-semibold'>Approve?</h1>
-                    <p className='text-sm text-subTitleColor'>Are you sure you want to approve this item?</p>
+                    <p className='text-sm text-subTitleColor'>Are you sure you want to approve this user?</p>
                 </div>
             </div>
 

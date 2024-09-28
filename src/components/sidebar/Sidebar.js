@@ -16,18 +16,21 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
     Admin: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Pending Users', path: '/pending-users', icon: <DashboardIcon /> },
-      { label: 'Crops List', path: '/dashboard', icon: <DashboardIcon /> },
+      { label: 'Crops List', path: '/view-crops', icon: <DashboardIcon /> },
       { label: 'Foods List', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Distributions List', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'All Users', path: '/all-users', icon: <DashboardIcon /> },
     ],
     Farmer: [
       { label: 'Add Crops', path: '/add-crops', icon: <DashboardIcon /> }, ,
-      { label: 'View Crops', path: '/view-crops', icon: <DashboardIcon /> }, ,
+      { label: 'Crops List', path: '/view-crops', icon: <DashboardIcon /> }, 
     ],
     Producer: [
-      { label: 'Create Food Item', path: '/producer/create-food' },
-      { label: 'Manage Food Items', path: '/producer/manage-food' },
+      { label: 'Add Foods', path: '/add-foods', icon: <DashboardIcon /> }, 
+      { label: 'Foods List', path: '/view-foods', icon: <DashboardIcon /> },
+      { label: 'View Crops', path: '/view-crops', icon: <DashboardIcon /> }, 
+      { label: 'Distributions List', path: '/dashboard', icon: <DashboardIcon /> },
+
     ],
     Distributor: [
       { label: 'Distribute Food', path: '/distributor/distribute-food' },

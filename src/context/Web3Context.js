@@ -144,7 +144,7 @@ export const Web3ContextProvider = ({ children }) => {
             console.log("User approved:", transaction);
             Swal.fire({
                 title: "Account Approved! 🎉",
-                text: "Your account approval successful",
+                text: "This account approval successful",
                 icon: "success"
             });
         } catch (error) {
@@ -189,10 +189,18 @@ export const Web3ContextProvider = ({ children }) => {
     // Producer adds a food item
     const addFoodItem = async (foodName, cropIds, location, startDate, endDate, price, quantity, expireDate) => {
         try {
+            setLoading(true);
             const contract = createEthereumContract();
             const transaction = await contract.addFoodItem(foodName, cropIds, location, startDate, endDate, price, quantity, expireDate);
             await transaction.wait();
             console.log("Food item added:", transaction);
+            setLoading(false);
+            router.push('/view-foods');
+            Swal.fire({
+                title: "Food Created! 🎉",
+                text: "Food Successfully Created.",
+                icon: "success"
+            });
         } catch (error) {
             console.error("Error adding food item:", error);
         }
@@ -281,7 +289,6 @@ export const Web3ContextProvider = ({ children }) => {
 
     useEffect(() => {
         checkIfWalletIsConnected();
-        fetchAllFoodItems(); // Fetch all food items on load
         fetchAllDistributions(); // Fetch all distributions on load
         getAllUsers();
     }, []);
