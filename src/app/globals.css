@@ -79,3 +79,15 @@ table th {
     max-width: 80px;
     text-align: center;
 }
+
+.main-content {
+    margin-left: 280px !important;
+}
+
+.selected-icon svg path {
+    stroke: #a1045a;
+}
+
+.selected-icon svg circle {
+    stroke: #a1045a;
+}

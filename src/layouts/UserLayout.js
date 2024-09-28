@@ -15,7 +15,7 @@ const UserLayout = ({ children }) => {
         <AntdRegistry>
             <div className={`  min-h-screen flex w-full`}>
                 <Sidebar role={userRole} />
-                <div style={{background: '#A7A19E0D'}} className="w-full ">
+                <div style={{ background: '#A7A19E0D' }} className="w-full main-content">
                     <Navbar />
                     <div className='p-6'>
                         {children}

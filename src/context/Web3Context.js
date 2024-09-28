@@ -281,14 +281,23 @@ export const Web3ContextProvider = ({ children }) => {
             setLoading(true);
             const contract = createEthereumContract();
             const traceData = await contract.getFoodTrace(foodId);
-            setFoodTrace(traceData);
+
+            if (traceData && traceData.length > 0) {
+                setFoodTrace(traceData);
+            } else {
+                // Set to null or empty array when no data
+                setFoodTrace(null);  // Can also use setFoodTrace([]) for clarity
+            }
+
             setLoading(false);
-            console.log('trace data:', traceData)
+            console.log('trace data:', traceData);
         } catch (error) {
             console.error("Error getting food trace:", error);
             setLoading(false);
+            setFoodTrace(null);  // Ensure to reset foodTrace on error as well
         }
     };
+
 
     // Function to trace food items
     const getAllUsers = async (foodId) => {

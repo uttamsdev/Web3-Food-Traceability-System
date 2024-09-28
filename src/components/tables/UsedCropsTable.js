@@ -16,8 +16,8 @@ const UsedCropsTable = ({ crops, users }) => {
                             <th className=" th text-left text-sm"><div>Farming Star Date <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Farming End Date <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Location <TableArrowDown /></div></th>
-                            <th className=" th text-left text-sm"><div>Price <TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div>Quantity<TableArrowDown /></div></th>
+                            <th className=" th text-left text-sm"><div>Total Price <TableArrowDown /></div></th>
+                            <th className=" th  text-sm"><div>Supply Quantity<TableArrowDown /></div></th>
                         </tr>
                     </thead>
                     <tbody>
