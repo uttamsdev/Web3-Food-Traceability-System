@@ -17,28 +17,31 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Pending Users', path: '/pending-users', icon: <DashboardIcon /> },
       { label: 'Crops List', path: '/view-crops', icon: <DashboardIcon /> },
-      { label: 'Foods List', path: '/dashboard', icon: <DashboardIcon /> },
-      { label: 'Distributions List', path: '/dashboard', icon: <DashboardIcon /> },
+      { label: 'Foods List', path: '/view-foods', icon: <DashboardIcon /> },
+      { label: 'Distributions List', path: '/view-distributions', icon: <DashboardIcon /> },
       { label: 'All Users', path: '/all-users', icon: <DashboardIcon /> },
     ],
     Farmer: [
       { label: 'Add Crops', path: '/add-crops', icon: <DashboardIcon /> }, ,
-      { label: 'Crops List', path: '/view-crops', icon: <DashboardIcon /> }, 
+      { label: 'Crops List', path: '/view-crops', icon: <DashboardIcon /> },
     ],
     Producer: [
-      { label: 'Add Foods', path: '/add-foods', icon: <DashboardIcon /> }, 
+      { label: 'Add Foods', path: '/add-foods', icon: <DashboardIcon /> },
       { label: 'Foods List', path: '/view-foods', icon: <DashboardIcon /> },
-      { label: 'View Crops', path: '/view-crops', icon: <DashboardIcon /> }, 
+      { label: 'View Crops', path: '/view-crops', icon: <DashboardIcon /> },
       { label: 'Distributions List', path: '/dashboard', icon: <DashboardIcon /> },
 
     ],
     Distributor: [
-      { label: 'Distribute Food', path: '/distributor/distribute-food' },
-      { label: 'View Distributions', path: '/distributor/view-distributions' },
+      { label: 'Add Distribution', path: '/add-distribute', icon: <DashboardIcon /> },
+      { label: 'Foods List', path: '/view-foods', icon: <DashboardIcon /> },
+      { label: 'Distributions List', path: '/view-distributions', icon: <DashboardIcon /> },
     ],
     Retailer: [
-      { label: 'View Products', path: '/retailer/view-products' },
-      { label: 'Manage Sales', path: '/retailer/manage-sales' },
+      { label: 'Distributions List', path: '/dashboard', icon: <DashboardIcon /> },
+      { label: 'Add Retail', path: '/add-retail', icon: <DashboardIcon /> },
+      { label: 'Foods List', path: '/view-foods', icon: <DashboardIcon /> },
+
     ],
   };
 

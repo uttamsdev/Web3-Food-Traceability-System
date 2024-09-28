@@ -9,26 +9,22 @@ import UserLayout from '@/layouts/UserLayout'
 import { Skeleton } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 
-const ViewCrops = () => {
+const ViewFoods = () => {
     const { loading, allUsers, foodItems, fetchAllFoodItems } = useContext(Web3Context);
-    console.log('all user', allUsers)
-    console.log("foods", foodItems);
-    const [producer, setPendingUsers] = useState(allUsers?.map(user => user?.wallet === foodItems?.producer));
-    console.log("producer", producer);
 
     useEffect(() => {
         fetchAllFoodItems();
     }, [])
     return (
         <UserLayout>
-            <Breadcrumb title='View Crop List' path='Dashboard / View Crops' />
+            <Breadcrumb title='View Food List' path='Dashboard / View Foods' />
             {
                 loading ? <div className='bg-white px-4 py-4 mt-4'><Skeleton active /> </div> :
-                foodItems?.length > 0 ? <ViewFoodsTable users={allUsers} foods={foodItems} /> : <NoDataFound />
+                    foodItems?.length > 0 ? <ViewFoodsTable users={allUsers} foods={foodItems} /> : <NoDataFound />
 
             }
         </UserLayout>
     )
 }
 
-export default ViewCrops
+export default ViewFoods

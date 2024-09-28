@@ -105,7 +105,7 @@ export const Web3ContextProvider = ({ children }) => {
             await transaction.wait();
             console.log("User registered:", transaction);
             setSignupLoading(false);
-            router.push('/dashboard');
+            router.push('/');
             Swal.fire({
                 title: "Account Created! 🎉, Wait for Approval",
                 text: "Your account creation request is successful. Wait for approval.",
@@ -223,10 +223,18 @@ export const Web3ContextProvider = ({ children }) => {
     // Distributor adds distribution details
     const addDistribution = async (foodId, location, receivedDate, sendDate, price, quantity, expireDate) => {
         try {
+            setLoading(true);
             const contract = createEthereumContract();
             const transaction = await contract.addDistribution(foodId, location, receivedDate, sendDate, price, quantity, expireDate);
             await transaction.wait();
+            setLoading(false);
             console.log("Distribution added:", transaction);
+            Swal.fire({
+                title: "Food Distributed Success! 🎉",
+                text: "Food Successfully Distributed.",
+                icon: "success"
+            });
+            router.push('/view-distributions');
         } catch (error) {
             console.error("Error adding distribution:", error);
         }
@@ -249,10 +257,17 @@ export const Web3ContextProvider = ({ children }) => {
     // Retailer adds retail entry
     const addRetailEntry = async (foodId, distributorId, location, receivedDate, sellDate, price, quantity, expireDate) => {
         try {
+            setLoading(true);
             const contract = createEthereumContract();
             const transaction = await contract.addRetailEntry(foodId, distributorId, location, receivedDate, sellDate, price, quantity, expireDate);
             await transaction.wait();
             console.log("Retail entry added:", transaction);
+            setLoading(false);
+            Swal.fire({
+                title: "Retail Entry Success! 🎉",
+                text: "Retail Entry Successfully Added.",
+                icon: "success"
+            });
         } catch (error) {
             console.error("Error adding retail entry:", error);
         }
