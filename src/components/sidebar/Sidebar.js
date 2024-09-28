@@ -56,7 +56,7 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
     <div className={`fixed max-w-[280px]   left-0  md:block  bg-white pt-[30px]  h-screen border-r border-[#A7A19E33] `}>
       <div className="pl-3 md:pl-[30px] pb-5 md:pb-[28px] bg-white flex items-center justify-between">
         <div className='w-[100px] h-[100px] mx-auto mb-5'>
-          <Image className=" min-w-full min-h-full rounded-full ring-2 ring-[#A1045A]" src={Logo} alt="" />
+          <Image className=" min-w-full min-h-full rounded-full ring-1 ring-[#A1045A]" src={Logo} alt="" />
           <span className='text-lg font-medium text-[#A1045A] block text-center mt-0.5'>{role}</span>
         </div>
         <span onClick={() => setSidebar(false)} className="md:hidden w-[30px] h-[30px] rounded-full flex items-center justify-center bg-special-bg"><SmallCloseIcn /></span>

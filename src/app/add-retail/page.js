@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import React, { useContext, useEffect, useState } from 'react';
 import Breadcrumb from '@/components/utils/Breadcrumb';
 import UserLayout from '@/layouts/UserLayout';
@@ -6,14 +6,19 @@ import { DatePicker, Input, Spin } from 'antd';
 import { Web3Context } from '@/context/Web3Context';
 import { LoadingOutlined } from '@ant-design/icons';
 import Dropdown from '@/components/utils/CustomDropdown';
+import CustomModal from '@/components/utils/Modal';
+import FoodQrModal from './components/FoodQrModal';
 
 const AddRetail = () => {
-    const { loading, foodItems, fetchAllFoodItems, distributions, fetchAllDistributions, addRetailEntry } = useContext(Web3Context);
+    const [generatedQRCode, setGeneratedQRCode] = useState(null);
+
+    const { loading, foodItems, fetchAllFoodItems, distributions, fetchAllDistributions, addRetailEntry, isRetailerAdded, setIsRetailerAdded } = useContext(Web3Context);
     const [startDate, setStartDate] = useState('');
     const [sellDate, setSellDate] = useState('');
     const [expireDate, setExpireDate] = useState('');
     const [dropdownValues, setDropdownValues] = useState({});
     const distributionIds = distributions?.map(distribution => ({ id: parseInt(distribution?.distributorId, 16) }));
+    const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         location: '',
         price: '',
@@ -42,6 +47,7 @@ const AddRetail = () => {
             setErrors(prev => ({ ...prev, expireDate: '' })); // Clear error if valid
         }
     };
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -70,18 +76,39 @@ const AddRetail = () => {
         return Object.keys(newErrors).length === 0;
     };
 
+    // useEffect to handle QR code generation and modal state
+    useEffect(() => {
+        if (isRetailerAdded) {
+            setOpen(true);
+
+            // Generate dynamic URL
+            const dynamicUrl = `http://localhost:3000/trace-food/${parseInt(dropdownValues?.food?.foodId?._hex, 16)}`;
+            setGeneratedQRCode(dynamicUrl);
+        }
+    }, [isRetailerAdded, dropdownValues?.food?.foodId]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validateForm()) return; // Block submission if validation fails
 
         // Perform any form submission actions here
-        addRetailEntry(parseInt(dropdownValues?.food?.foodId?._hex, 16), dropdownValues?.distribution?.id, formData.location, startDate, sellDate, formData.price, formData.quantity, expireDate);
+        addRetailEntry(
+            parseInt(dropdownValues?.food?.foodId?._hex, 16),
+            dropdownValues?.distribution?.id,
+            formData?.location,
+            startDate,
+            sellDate,
+            formData?.price,
+            formData?.quantity,
+            expireDate
+        );
     };
 
     useEffect(() => {
         fetchAllFoodItems();
         fetchAllDistributions();
     }, []);
+
     return (
         <UserLayout>
             <Breadcrumb title='Add Retail Information' path='Dashboard / Add Retail' />
@@ -172,6 +199,7 @@ const AddRetail = () => {
                     {loading ? <span className='flex items-center justify-center gap-1.5'> <Spin indicator={<LoadingOutlined spin />} /> Creating Retail Information</span> : <span>Add Retail Information</span>}
                 </button>
             </form>
+            <CustomModal  closable={false} modalClass={'!max-w-[700px] !w-full'} modalTitle={''} setOpen={setOpen} open={open} modalContent={<FoodQrModal generatedQRCode={generatedQRCode} setOpen={setOpen} setIsRetailerAdded={setIsRetailerAdded}/>} />
         </UserLayout>
     );
 };

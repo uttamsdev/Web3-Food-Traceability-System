@@ -26,6 +26,7 @@ export const Web3ContextProvider = ({ children }) => {
     const [signupLoading, setSignupLoading] = useState(false);
     const [allUsers, setAllUsers] = useState();
     const [approveLoading, setApproveLoading] = useState(false);
+    const [isRetailerAdded, setIsRetailerAdded] = useState(false);
 
     // Create a connection to the smart contract
     const createEthereumContract = () => {
@@ -265,11 +266,12 @@ export const Web3ContextProvider = ({ children }) => {
             await transaction.wait();
             console.log("Retail entry added:", transaction);
             setLoading(false);
-            Swal.fire({
-                title: "Retail Entry Success! 🎉",
-                text: "Retail Entry Successfully Added.",
-                icon: "success"
-            });
+            if(transaction.hash){
+                setIsRetailerAdded(true);
+            }
+
+            console.log("transaction", transaction);
+            console.log('transaction hash:', transaction.hash);
         } catch (error) {
             console.error("Error adding retail entry:", error);
         }
@@ -350,7 +352,9 @@ export const Web3ContextProvider = ({ children }) => {
                 allUsers,
                 fetchPendingUsers,
                 approveLoading,
-                fetchAllCrops
+                fetchAllCrops,
+                isRetailerAdded,
+                setIsRetailerAdded
             }}
         >
             {children}

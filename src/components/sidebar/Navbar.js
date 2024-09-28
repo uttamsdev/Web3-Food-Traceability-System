@@ -43,7 +43,7 @@ const Navbar = ({ setSidebar }) => {
     );
     return (
         <div className={`w-full pl-4 md:pl-[30px] py-2.5 md:py-4 pr-4 md:pr-[57px] flex gap-3 justify-between items-center bg-white !sticky !top-0 z-[99] `}>
-            <div className='cursor-pointer size-[30px] rounded  flex items-center justify-ce'>
+            <div className='cursor-pointer size-[30px] rounded  flex items-center justify-center'>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" color="#000000" fill="none">
                     <path d="M11.5 18C11.5 18 5.50001 13.5811 5.5 12C5.49999 10.4188 11.5 6 11.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
                     <path d="M18.5 18C18.5 18 12.5 13.5811 12.5 12C12.5 10.4188 18.5 6 18.5 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />

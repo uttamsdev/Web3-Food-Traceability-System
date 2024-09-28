@@ -5,7 +5,7 @@ import React, { useState } from 'react'
 import { twMerge } from 'tailwind-merge';
 const urbanist = Urbanist({ subsets: ["latin"] });
 
-const CustomModal = ({ open, setOpen, modalContent, modalTitle, modalClass}) => {
+const CustomModal = ({ closable = true, open, setOpen, modalContent, modalTitle, modalClass }) => {
 
     const handleCancel = () => {
         setOpen(false);
@@ -14,6 +14,7 @@ const CustomModal = ({ open, setOpen, modalContent, modalTitle, modalClass}) => 
         <Modal
             title={false}
             footer={false}
+            closable={closable}
 
             open={open}
             // onOk={handleOk}
@@ -22,7 +23,7 @@ const CustomModal = ({ open, setOpen, modalContent, modalTitle, modalClass}) => 
 
 
         >
-            <div className={twMerge(`${urbanist.className} md:!max-w-[600px] !w-full max-h-[450px] md:max-h-[500px] overflow-y-auto`,modalClass)}>{modalContent ? modalContent : <p>Please set modal content</p>}</div>
+            <div className={twMerge(`${urbanist.className} md:!max-w-[600px] !w-full max-h-[450px] md:max-h-[500px] overflow-y-auto`, modalClass)}>{modalContent ? modalContent : <p>Please set modal content</p>}</div>
         </Modal>
     )
 }
