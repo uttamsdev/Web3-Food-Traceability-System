@@ -1,37 +1,42 @@
 
 "use client"
 import { ArrowDownIcn, BarsIcon, NotificationIcn, SearchIcon } from '@/assets/icons'
-import React, { useState } from 'react'
-import User from '../../assets/user.svg'
+import React, { useContext, useEffect, useState } from 'react'
+import UserImage from '../../assets/user.svg'
 import Image from 'next/image'
 import { Dropdown, Menu, Space } from 'antd'
+import { Web3Context } from '@/context/Web3Context'
+import { useRouter } from 'next/navigation'
 // import Search from '@/app/dashboard/components/Search'
 // import Notification from '@/app/dashboard/components/Notification'
 // import CustomModal from '@/utils/Modal'
 
 const Navbar = ({ setSidebar }) => {
-    const [notification, setNotification] = useState(false);
-    const [modalContent, setModalContent] = useState(null);
-    const [search, setSearch] = useState(false);
+    const { allUsers, currentAccount, userRole } = useContext(Web3Context);
+    const router = useRouter();
+
     const menuItems = [
         {
-            label: 'Account',
-            key: '0',
+            label: 'Dashboard',
+            key: '1',
         },
         {
-            label: "Settings",
-            key: '1'
+            label: "Trace Food",
+            key: '2'
         },
         {
-            label: "Logout",
+            label: "Home",
             key: 3
         }
     ];
     const handleMenuClick = (e) => {
         console.log('Clicked item:', e.key);
         if (e.key === '1') {
-
-
+            router.push('/dashboard');
+        } else if (e.key === '2') {
+            router.push('/trace-food/search');
+        } else if (e.key === '3') {
+            router.push('/');
         }
     };
 
@@ -41,6 +46,8 @@ const Navbar = ({ setSidebar }) => {
             onClick={handleMenuClick} // Handle menu item clicks
         />
     );
+
+
     return (
         <div className={`w-full pl-4 md:pl-[30px] py-2.5 md:py-4 pr-4 md:pr-[57px] flex gap-3 justify-between items-center bg-white !sticky !top-0 z-[99] `}>
             <div className='cursor-pointer size-[30px] rounded  flex items-center justify-center'>
@@ -54,7 +61,6 @@ const Navbar = ({ setSidebar }) => {
             <div className='flex items-center gap-4 relative'>
                 <div className='flex items-center gap-4 Navbar-icon'>
                     {/* <span onClick={() => { setSearch(true); setModalContent(<Search />) }} className='cursor-pointer'><BigSearchIcon /></span> */}
-                    <span onClick={() => setNotification((prev) => !prev)} className='cursor-pointer'><NotificationIcn /></span>
                     {
                         // notification && <Notification setNotification={setNotification} />
                     }
@@ -62,9 +68,9 @@ const Navbar = ({ setSidebar }) => {
                 <Dropdown overlay={menu} trigger={['click']}>
                     <Space>
                         <div className='flex gap-2 items-center cursor-pointer'>
-                            <Image className='min-w-[30px] md:min-w-[40px] min-h-[30px] md:min-h-[40px] rounded-full' src={User} alt='user image' />
+                            <Image className='min-w-[30px] md:min-w-[40px] min-h-[30px] md:min-h-[40px] rounded-full' src={UserImage} alt='user image' />
                             <div className='flex flex-col'>
-                                <h3 className='text-sm md:text-base leading-[24px] text-primary font-semibold whitespace-nowrap'>Roney Khan</h3>
+                                <h3 className='text-sm md:text-base leading-[24px] text-primary font-semibold whitespace-nowrap'>{userRole}</h3>
                                 <span className='text-xs text-lightText'>Owner</span>
                             </div>
                             <ArrowDownIcn />

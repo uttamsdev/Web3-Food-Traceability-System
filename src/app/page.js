@@ -1,31 +1,159 @@
 'use client'
-import { FacebookIcon, LinkedIcon, TwitterIcon } from "@/assets/icons";
+import { ArrowDownIcn, FacebookIcon, LinkedIcon, TwitterIcon } from "@/assets/icons";
 import Image from "next/image";
 import FoodImage from '@/assets/food2.jpg';
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Web3Context } from "@/context/Web3Context";
+import { Dropdown, Menu, Space } from "antd";
+import User from '../assets/user.svg'
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+
 
 export default function Home() {
   const { isActive, userRole, currentAccount, connectWallet } = useContext(Web3Context);
+  const router = useRouter();
+  const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false); // For mobile menu
 
-  console.log("current account", currentAccount);
-  console.log("isActive", isActive);
-  console.log('UserRole', userRole);
+
+  const menuItems = [
+    {
+      label: 'Dashboard',
+      key: '1',
+    },
+    {
+      label: "Trace Food",
+      key: '2'
+    },
+    {
+      label: "Home",
+      key: 3
+    }
+  ];
+  const handleMenuClick = (e) => {
+    console.log('Clicked item:', e.key);
+    if (e.key === '1') {
+      router.push('/dashboard');
+    } else if (e.key === '2') {
+      router.push('/trace-food/search');
+    } else if (e.key === '3') {
+      router.push('/');
+    }
+  };
+
+  const menu = (
+    <Menu
+      items={menuItems}
+      onClick={handleMenuClick} // Handle menu item clicks
+    />
+  );
+
+  // Detect scroll and add glass effect
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setScrolled(true);
+      } else {
+        setScrolled(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
-    <div className="flex flex-col min-h-screen font-sans bg-gray-50">
+    <div className="flex flex-col min-h-screen font-sans bg-gray-50 relative">
       {/* Navbar */}
-      <header className="bg-black opacity-90 text-white shadow-lg">
+      <header className={`sticky top-0 z-[999] transition-all duration-300 ease-in-out
+      ${scrolled ? "bg-gradient-to-r from-green-800/70 to-teal-600/70 shadow-2xl backdrop-blur-xl" : "bg-gradient-to-r from-green-800 to-teal-600 shadow-2xl backdrop-blur-xl"}`}>
         <nav className="container mx-auto px-6 py-4 flex justify-between items-center">
-          <div className="text-4xl font-extrabold tracking-widest">FoodTrace</div>
-          <ul className="flex space-x-8 text-lg font-semibold items-center">
-            <li><a href="#home" className="hover:text-green-400 transition duration-200">Home</a></li>
-            <li><a href="#about" className="hover:text-green-400 transition duration-200">About</a></li>
-            <li><a href="#roles" className="hover:text-green-400 transition duration-200">Roles</a></li>
-            <li><a href="#contact" className="hover:text-green-400 transition duration-200">Contact</a></li>
-            {
-              !currentAccount && <li><button onClick={connectWallet} href="#contact" className=" bg-yellow-600 px-1.5 py-1 rounded transition duration-200 active:scale-90">Connect Wallet</button></li>
-            }
+          {/* Brand Logo */}
+          <div className="text-3xl font-extrabold tracking-widest text-white relative z-10">
+            <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-pink-500 to-red-500">Food Traceability System</span>
+          </div>
+
+          {/* Desktop Menu */}
+          <ul className="hidden md:flex space-x-8 text-lg font-semibold items-center text-white relative z-10">
+            <li><a href="#home" className="hover:text-yellow-400 transition duration-300">Home</a></li>
+            <li><a href="#about" className="hover:text-yellow-400 transition duration-300">About</a></li>
+            <li><a href="#roles" className="hover:text-yellow-400 transition duration-300">Roles</a></li>
+            <li><a href="#contact" className="hover:text-yellow-400 transition duration-300">Contact</a></li>
+            <li><Link href="/trace-food/search" className="hover:text-yellow-400 transition duration-300">Trace Food</Link></li>
+
+            {!currentAccount && (
+              <li>
+                <button onClick={connectWallet} className="bg-gradient-to-r from-yellow-500 to-orange-500 px-4 py-2 rounded-full text-sm font-bold transition transform duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/50">
+                  Connect Wallet
+                </button>
+              </li>
+            )}
+
+            {currentAccount && (
+              <div className="relative z-[99999]">
+                <Dropdown overlay={menu} trigger={['click']}>
+                  <Space>
+                    <div className="flex gap-2 items-center cursor-pointer">
+                      <Image className="w-10 h-10 rounded-full ring-2 ring-yellow-500 shadow-lg" src={User} alt="user image" />
+                      <div className="flex flex-col text-left">
+                        <h3 className="text-base leading-5 text-white font-semibold">{userRole}</h3>
+                        <span className="text-xs text-gray-300">Owner</span>
+                      </div>
+                      <ArrowDownIcn />
+                    </div>
+                  </Space>
+                </Dropdown>
+              </div>
+            )}
           </ul>
+
+          {/* Mobile Menu Icon */}
+          <div className="md:hidden flex items-center">
+            <button onClick={() => setMenuOpen(!menuOpen)} className="text-white focus:outline-none">
+              <svg className="w-8 h-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d={menuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+              </svg>
+            </button>
+          </div>
+
+          {/* Mobile Menu */}
+          {menuOpen && (
+            <div className="md:hidden absolute top-16 left-0 w-full bg-green-900/80 backdrop-blur-md shadow-2xl p-6">
+              <ul className="flex flex-col space-y-6 text-lg font-semibold items-center text-white">
+                <li><a href="#home" className="hover:text-yellow-400 transition duration-300" onClick={() => setMenuOpen(false)}>Home</a></li>
+                <li><a href="#about" className="hover:text-yellow-400 transition duration-300" onClick={() => setMenuOpen(false)}>About</a></li>
+                <li><a href="#roles" className="hover:text-yellow-400 transition duration-300" onClick={() => setMenuOpen(false)}>Roles</a></li>
+                <li><a href="#contact" className="hover:text-yellow-400 transition duration-300" onClick={() => setMenuOpen(false)}>Contact</a></li>
+                <li><Link href="/trace-food/search" className="hover:text-yellow-400 transition duration-300" onClick={() => setMenuOpen(false)}>Trace Food</Link></li>
+
+                {!currentAccount && (
+                  <li>
+                    <button onClick={connectWallet} className="bg-gradient-to-r from-yellow-500 to-orange-500 px-4 py-2 rounded-full text-sm font-bold transition transform duration-300 hover:scale-105 active:scale-95 shadow-lg shadow-yellow-500/50">
+                      Connect Wallet
+                    </button>
+                  </li>
+                )}
+
+                {currentAccount && (
+                  <div className="relative z-[99999]">
+                    <Dropdown overlay={menu} trigger={['click']}>
+                      <Space>
+                        <div className="flex gap-2 items-center cursor-pointer">
+                          <Image className="w-10 h-10 rounded-full ring-2 ring-yellow-500 shadow-lg" src={User} alt="user image" />
+                          <div className="flex flex-col text-left">
+                            <h3 className="text-base leading-5 text-white font-semibold">{userRole}</h3>
+                            <span className="text-xs text-gray-300">Owner</span>
+                          </div>
+                          <ArrowDownIcn />
+                        </div>
+                      </Space>
+                    </Dropdown>
+                  </div>
+                )}
+              </ul>
+            </div>
+          )}
         </nav>
       </header>
 
@@ -71,7 +199,7 @@ export default function Home() {
             <div className="bg-white shadow-lg rounded-lg p-6 text-center transition-transform transform hover:scale-105 hover:shadow-xl">
               <img
                 className="h-40 mx-auto mb-4 rounded-full"
-                src="https://images.unsplash.com/photo-1529253355930-7e33e5695feb?auto=format&fit=crop&w=600&q=80"
+                src="https://media.istockphoto.com/id/1049653176/photo/happy-thai-female-farmer-harvesting-rice-in-countryside-thailand.jpg?s=612x612&w=0&k=20&c=BD--rcVXQNb-2IE3gg-9BVm8HQ4QqfGjGB7WOFshdJw="
                 alt="Farmer"
               />
               <h3 className="text-2xl font-bold mb-2 text-green-700">Farmers</h3>
@@ -84,7 +212,7 @@ export default function Home() {
             <div className="bg-white shadow-lg rounded-lg p-6 text-center transition-transform transform hover:scale-105 hover:shadow-xl">
               <img
                 className="h-40 mx-auto mb-4 rounded-full"
-                src="https://images.unsplash.com/photo-1542838687-fcfbfcb703cc?auto=format&fit=crop&w=600&q=80"
+                src="https://www.foodnavigator.com/var/wrbm_gb_food_pharma/storage/images/5/5/8/9/1209855-1-eng-GB/Producer-groups-launch-FSMA-guidelines.jpg"
                 alt="Producer"
               />
               <h3 className="text-2xl font-bold mb-2 text-green-700">Producers</h3>
@@ -97,7 +225,7 @@ export default function Home() {
             <div className="bg-white shadow-lg rounded-lg p-6 text-center transition-transform transform hover:scale-105 hover:shadow-xl">
               <img
                 className="h-40 mx-auto mb-4 rounded-full"
-                src="https://images.unsplash.com/photo-1568051243854-6d452366f4e6?auto=format&fit=crop&w=600&q=80"
+                src="https://blog.wenda-it.com/hubfs/Imported_Blog_Media/1616060834-distribuzionewarehouse2.jpg"
                 alt="Distributor"
               />
               <h3 className="text-2xl font-bold mb-2 text-green-700">Distributors</h3>
@@ -110,7 +238,7 @@ export default function Home() {
             <div className="bg-white shadow-lg rounded-lg p-6 text-center transition-transform transform hover:scale-105 hover:shadow-xl">
               <img
                 className="h-40 mx-auto mb-4 rounded-full"
-                src="https://images.unsplash.com/photo-1544918871-18e4ddcb4bd6?auto=format&fit=crop&w=600&q=80"
+                src="https://corporate.tops.co.th/wp-content/uploads/2016/10/Fruit-1024x416.jpg"
                 alt="Retailer"
               />
               <h3 className="text-2xl font-bold mb-2 text-green-700">Retailers</h3>

@@ -27,10 +27,12 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
       { label: 'All Users', path: '/all-users', icon: <AllUsersIcon /> },
     ],
     Farmer: [
+      { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Add Crops', path: '/add-crops', icon: <PlusIcon /> }, ,
       { label: 'Crops List', path: '/view-crops', icon: <ListViewIcon /> },
     ],
     Producer: [
+      { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Add Foods', path: '/add-foods', icon: <PlusIcon /> },
       { label: 'Foods List', path: '/view-foods', icon: <ListViewIcon /> },
       { label: 'View Crops', path: '/view-crops', icon: <ListIcon /> },
@@ -38,11 +40,13 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
 
     ],
     Distributor: [
+      { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Add Distribution', path: '/add-distribute', icon: <PlusIcon /> },
       { label: 'Foods List', path: '/view-foods', icon: <List3Icon /> },
       { label: 'Distributions List', path: '/view-distributions', icon: <ListViewIcon /> },
     ],
     Retailer: [
+      { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Distributions List', path: '/view-distributions', icon: <ListViewIcon /> },
       { label: 'Add Retail', path: '/add-retail', icon: <PlusIcon /> },
       { label: 'Foods List', path: '/view-foods', icon: <List3Icon /> },
