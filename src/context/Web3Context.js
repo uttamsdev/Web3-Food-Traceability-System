@@ -17,7 +17,6 @@ export const Web3ContextProvider = ({ children }) => {
     const [isActive, setIsActive] = useState(false); // Track active status
     const [userRole, setUserRole] = useState(""); // Track user's role
     const [loading, setLoading] = useState(false); // Loading state for contract interaction
-    const [pendingUsers, setPendingUsers] = useState([]); // Track pending users
     const [crops, setCrops] = useState([]); // Store list of crops
     const [foodItems, setFoodItems] = useState([]); // Store list of food items
     const [distributions, setDistributions] = useState([]); // Store list of distributions
@@ -121,19 +120,19 @@ export const Web3ContextProvider = ({ children }) => {
     };
 
     // Admin fetches pending users for approval
-    const fetchPendingUsers = async () => {
-        try {
-            setLoading(true);
-            const contract = createEthereumContract();
-            const users = await contract.getPendingUsers();
-            console.log('pending users', users);
-            setPendingUsers(users);
-            setLoading(false);
-        } catch (error) {
-            console.error("Error fetching pending users:", error);
-            setLoading(false);
-        }
-    };
+    // const fetchPendingUsers = async () => {
+    //     try {
+    //         setLoading(true);
+    //         const contract = createEthereumContract();
+    //         const users = await contract.getPendingUsers();
+    //         console.log('pending users', users);
+    //         setPendingUsers(users);
+    //         setLoading(false);
+    //     } catch (error) {
+    //         console.error("Error fetching pending users:", error);
+    //         setLoading(false);
+    //     }
+    // };
 
     // Admin approves a user
     const approveUser = async (userAddress) => {
@@ -142,7 +141,7 @@ export const Web3ContextProvider = ({ children }) => {
             const contract = createEthereumContract();
             const transaction = await contract.approveUser(userAddress);
             await transaction.wait();
-            await fetchPendingUsers(); // Update pending users list after approval
+            await getAllUsers();
             setApproveLoading(false);
             console.log("User approved:", transaction);
             Swal.fire({
@@ -330,7 +329,6 @@ export const Web3ContextProvider = ({ children }) => {
                 checkIfWalletIsConnected,
                 isActive,
                 userRole,
-                pendingUsers,
                 registerUser,
                 approveUser,
                 addCrop,
@@ -346,11 +344,9 @@ export const Web3ContextProvider = ({ children }) => {
                 getFoodTrace,
                 foodTrace,
                 loading,
-                fetchPendingUsers,
                 signupLoading,
                 getAllUsers,
                 allUsers,
-                fetchPendingUsers,
                 approveLoading,
                 fetchAllCrops,
                 isRetailerAdded,
