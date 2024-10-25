@@ -94,11 +94,11 @@ export default function Home() {
               <div className="relative z-[99999]">
                 <Dropdown overlay={menu} trigger={['click']}>
                   <Space>
-                    <div className="flex gap-2 items-center cursor-pointer">
+                    <div className="flex gap-2 items-center cursor-pointer arrow-icn">
                       <Image className="w-10 h-10 rounded-full ring-2 ring-yellow-500 shadow-lg" src={User} alt="user image" />
                       <div className="flex flex-col text-left">
                         <h3 className="text-base leading-5 text-white font-semibold">{userRole}</h3>
-                        <span className="text-xs text-gray-300">Owner</span>
+                        <span className="text-xs text-gray-300">FoodX Tracer</span>
                       </div>
                       <ArrowDownIcn />
                     </div>

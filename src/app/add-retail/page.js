@@ -8,10 +8,11 @@ import { LoadingOutlined } from '@ant-design/icons';
 import Dropdown from '@/components/utils/CustomDropdown';
 import CustomModal from '@/components/utils/Modal';
 import FoodQrModal from './components/FoodQrModal';
+import { generateRandomUID } from '@/components/lib/RandomUID';
 
 const AddRetail = () => {
     const [generatedQRCode, setGeneratedQRCode] = useState(null);
-
+    const [retailID, setRetailID] = useState('');
     const { loading, foodItems, fetchAllFoodItems, distributions, fetchAllDistributions, addRetailEntry, isRetailerAdded, setIsRetailerAdded } = useContext(Web3Context);
     const [startDate, setStartDate] = useState('');
     const [sellDate, setSellDate] = useState('');
@@ -82,7 +83,7 @@ const AddRetail = () => {
             setOpen(true);
 
             // Generate dynamic URL
-            const dynamicUrl = `http://localhost:3000/trace-food/${parseInt(dropdownValues?.food?.foodId?._hex, 16)}`;
+            const dynamicUrl = `https://food-traceability-system.netlify.app/trace-food/${retailID}`;
             setGeneratedQRCode(dynamicUrl);
         }
     }, [isRetailerAdded, dropdownValues?.food?.foodId]);
@@ -91,8 +92,10 @@ const AddRetail = () => {
         e.preventDefault();
         if (!validateForm()) return; // Block submission if validation fails
 
+        console.log(formData)
         // Perform any form submission actions here
         addRetailEntry(
+            retailID,
             parseInt(dropdownValues?.food?.foodId?._hex, 16),
             dropdownValues?.distribution?.id,
             formData?.location,
@@ -107,7 +110,9 @@ const AddRetail = () => {
     useEffect(() => {
         fetchAllFoodItems();
         fetchAllDistributions();
+        setRetailID(generateRandomUID());
     }, []);
+
 
     return (
         <UserLayout>
@@ -116,6 +121,19 @@ const AddRetail = () => {
                 className='mt-6 flex flex-col mx-auto gap-3 max-w-[750px] px-5 py-5 bg-white rounded'
                 onSubmit={handleSubmit}
             >
+                <div className='flex flex-col gap-0.5'>
+                    <label className='text-base font-medium'>Retail ID</label>
+                    <Input
+                        placeholder='Retail ID'
+                        name='retail_id'
+                        value={retailID}
+                        onChange={handleInputChange}
+                        disabled={true}
+                    // style={{ borderColor: errors.location ? 'red' : '' }}
+                    />
+                    {/* {errors.location && <p className='text-red-500 text-sm'>{errors.location}</p>} */}
+                </div>
+
                 <div className='flex flex-col gap-0.5'>
                     <label className='text-base font-medium'>Select Food</label>
                     <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={foodItems} searchBy={"foodName"} fieldName="food" placeholder='Select Food' />
@@ -199,7 +217,7 @@ const AddRetail = () => {
                     {loading ? <span className='flex items-center justify-center gap-1.5'> <Spin indicator={<LoadingOutlined spin />} /> Creating Retail Information</span> : <span>Add Retail Information</span>}
                 </button>
             </form>
-            <CustomModal  closable={false} modalClass={'!max-w-[700px] !w-full'} modalTitle={''} setOpen={setOpen} open={open} modalContent={<FoodQrModal generatedQRCode={generatedQRCode} setOpen={setOpen} setIsRetailerAdded={setIsRetailerAdded}/>} />
+            <CustomModal closable={false} modalClass={'!max-w-[700px] !w-full'} modalTitle={''} setOpen={setOpen} open={open} modalContent={<FoodQrModal generatedQRCode={generatedQRCode} setOpen={setOpen} setIsRetailerAdded={setIsRetailerAdded} />} />
         </UserLayout>
     );
 };

@@ -109,7 +109,7 @@ const TraceFood = () => {
                         </div>
                     )
                 ) : (
-                    <div className='container mx-auto mt-10 text-center'>
+                    <div className={`container mx-auto mt-10 text-center`}>
                         <p className='text-lg text-[#f06969] font-medium'>
                             No food trace data found for the provided ID.
                         </p>

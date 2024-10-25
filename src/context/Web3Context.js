@@ -5,6 +5,7 @@ import { createContext, useEffect, useState } from "react";
 import { contractABI, contractAddress } from '../components/utils/Constant'; // Update the correct path
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 // Check if window.ethereum exists
 const { ethereum } = typeof window !== 'undefined' ? window : {};
@@ -38,7 +39,9 @@ export const Web3ContextProvider = ({ children }) => {
     // Connect wallet
     const connectWallet = async () => {
         try {
-            if (!ethereum) return alert("Please install MetaMask.");
+            if (!ethereum) return toast.info('Please install MetaMask', {
+                description: 'To use this application install metamsk.'
+            });
             const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
             setCurrentAccount(accounts[0]);
             await checkUserStatus(accounts[0]); // Check active status and role
@@ -50,7 +53,9 @@ export const Web3ContextProvider = ({ children }) => {
     // Check if the wallet is connected and if the user is active
     const checkIfWalletIsConnected = async () => {
         try {
-            if (!ethereum) return swal("MetaMask Not Installed!", "Please install MetaMask to use this application!", "error");
+            if (!ethereum) return toast.info('Please install MetaMask', {
+                description: 'To use this application install metamsk.'
+            });
             const accounts = await ethereum.request({ method: 'eth_accounts' });
 
             if (accounts.length) {
@@ -61,7 +66,9 @@ export const Web3ContextProvider = ({ children }) => {
             }
         } catch (error) {
             console.error("Error checking wallet connection:", error);
-            Swal.fire("Connect Wallet!", "Please connect your wallet to use this application!", "info");
+            toast.error('Connect your wallet first', {
+                description: 'Connect your wallet to proceed.',
+            })
         }
     };
 
@@ -108,11 +115,9 @@ export const Web3ContextProvider = ({ children }) => {
             console.log("User registered:", transaction);
             setSignupLoading(false);
             router.push('/');
-            Swal.fire({
-                title: "Account Created! 🎉, Wait for Approval",
-                text: "Your account creation request is successful. Wait for approval.",
-                icon: "success"
-            });
+            toast.success('Account Created! 🎉, Wait for Approval', {
+                description: 'Your account creation request is successful. Wait for approval.'
+            })
 
         } catch (error) {
             console.error("Error registering user:", error);
@@ -144,11 +149,9 @@ export const Web3ContextProvider = ({ children }) => {
             await getAllUsers();
             setApproveLoading(false);
             console.log("User approved:", transaction);
-            Swal.fire({
-                title: "Account Approved! 🎉",
-                text: "This account approval successful",
-                icon: "success"
-            });
+            toast.success('Account Approved! 🎉', {
+                description: 'This account approval successful'
+            })
         } catch (error) {
             console.error("Error approving user:", error);
         }
@@ -163,11 +166,9 @@ export const Web3ContextProvider = ({ children }) => {
             await transaction.wait();
             console.log("Crop added:", transaction);
             setLoading(false);
-            Swal.fire({
-                title: "Crop Added🎉",
-                text: "Your crop successfully added.",
-                icon: "success"
-            });
+            toast.success('Crop Added Successfully! 🎉', {
+                description: 'Thank for adding your crops.'
+            })
             router.push('/view-crops')
         } catch (error) {
             console.error("Error adding crop:", error);
@@ -198,11 +199,9 @@ export const Web3ContextProvider = ({ children }) => {
             console.log("Food item added:", transaction);
             setLoading(false);
             router.push('/view-foods');
-            Swal.fire({
-                title: "Food Created! 🎉",
-                text: "Food Successfully Created.",
-                icon: "success"
-            });
+            toast.success('Food Created! 🎉', {
+                description: 'Your food item successfully created.'
+            })
         } catch (error) {
             console.error("Error adding food item:", error);
         }
@@ -231,11 +230,9 @@ export const Web3ContextProvider = ({ children }) => {
             await transaction.wait();
             setLoading(false);
             console.log("Distribution added:", transaction);
-            Swal.fire({
-                title: "Food Distributed Success! 🎉",
-                text: "Food Successfully Distributed.",
-                icon: "success"
-            });
+            toast.success('Food distributed success! 🎉', {
+                description: 'Food successfully distributed.'
+            })
             router.push('/view-distributions');
         } catch (error) {
             console.error("Error adding distribution:", error);
@@ -257,15 +254,15 @@ export const Web3ContextProvider = ({ children }) => {
     };
 
     // Retailer adds retail entry
-    const addRetailEntry = async (foodId, distributorId, location, receivedDate, sellDate, price, quantity, expireDate) => {
+    const addRetailEntry = async (retailId, foodId, distributorId, location, receivedDate, sellDate, price, quantity, expireDate) => {
         try {
             setLoading(true);
             const contract = createEthereumContract();
-            const transaction = await contract.addRetailEntry(foodId, distributorId, location, receivedDate, sellDate, price, quantity, expireDate);
+            const transaction = await contract.addRetailEntry(retailId, foodId, distributorId, location, receivedDate, sellDate, price, quantity, expireDate);
             await transaction.wait();
             console.log("Retail entry added:", transaction);
             setLoading(false);
-            if(transaction.hash){
+            if (transaction.hash) {
                 setIsRetailerAdded(true);
             }
 

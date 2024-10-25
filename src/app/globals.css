@@ -91,3 +91,44 @@ table th {
 .selected-icon svg circle {
     stroke: #a1045a;
 }
+
+.arrow-icn svg path {
+    stroke: #fff !important;
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, #ff7e5f, #feb47b, #ff6a00, #ee0979);
+    /* Richer gradient colors */
+    background-size: 300% 300%;
+    animation: gradientAnimation 8s ease infinite, scaleAnimation 1.5s ease infinite;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+}
+
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+/* 
+@keyframes scaleAnimation {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.03);
+    }
+} */

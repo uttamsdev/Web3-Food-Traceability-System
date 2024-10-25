@@ -71,7 +71,7 @@ const Navbar = ({ setSidebar }) => {
                             <Image className='min-w-[30px] md:min-w-[40px] min-h-[30px] md:min-h-[40px] rounded-full' src={UserImage} alt='user image' />
                             <div className='flex flex-col'>
                                 <h3 className='text-sm md:text-base leading-[24px] text-primary font-semibold whitespace-nowrap'>{userRole}</h3>
-                                <span className='text-xs text-lightText'>Owner</span>
+                                <span className='text-xs text-lightText'>FoodX Tracer</span>
                             </div>
                             <ArrowDownIcn />
                         </div>
