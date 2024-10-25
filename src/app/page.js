@@ -81,6 +81,8 @@ export default function Home() {
             <li><a href="#roles" className="hover:text-yellow-400 transition duration-300">Roles</a></li>
             <li><a href="#contact" className="hover:text-yellow-400 transition duration-300">Contact</a></li>
             <li><Link href="/trace-food/search" className="hover:text-yellow-400 transition duration-300">Trace Food</Link></li>
+            <li><Link href="/signup" className="hover:text-yellow-400 transition duration-300">Sign Up</Link></li>
+
 
             {!currentAccount && (
               <li>
