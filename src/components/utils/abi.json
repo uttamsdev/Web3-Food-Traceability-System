@@ -131,6 +131,11 @@
 	{
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "_retailId",
+				"type": "string"
+			},
+			{
 				"internalType": "uint256",
 				"name": "_foodId",
 				"type": "uint256"
@@ -292,9 +297,9 @@
 		"inputs": [
 			{
 				"indexed": false,
-				"internalType": "uint256",
-				"name": "retailerId",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "retailId",
+				"type": "string"
 			},
 			{
 				"indexed": false,
@@ -534,9 +539,9 @@
 		"name": "allRetailEntries",
 		"outputs": [
 			{
-				"internalType": "uint256",
-				"name": "retailerId",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "retailId",
+				"type": "string"
 			},
 			{
 				"internalType": "uint256",
@@ -795,9 +800,9 @@
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_foodId",
-				"type": "uint256"
+				"internalType": "string",
+				"name": "_retailId",
+				"type": "string"
 			}
 		],
 		"name": "getFoodTrace",
@@ -909,9 +914,9 @@
 			{
 				"components": [
 					{
-						"internalType": "uint256",
-						"name": "retailerId",
-						"type": "uint256"
+						"internalType": "string",
+						"name": "retailId",
+						"type": "string"
 					},
 					{
 						"internalType": "uint256",
@@ -1002,41 +1007,6 @@
 					}
 				],
 				"internalType": "struct FoodTraceabilitySystem.Crop[]",
-				"name": "",
-				"type": "tuple[]"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "getPendingUsers",
-		"outputs": [
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "wallet",
-						"type": "address"
-					},
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "uint8",
-						"name": "role",
-						"type": "uint8"
-					},
-					{
-						"internalType": "bool",
-						"name": "isActive",
-						"type": "bool"
-					}
-				],
-				"internalType": "struct FoodTraceabilitySystem.User[]",
 				"name": "",
 				"type": "tuple[]"
 			}

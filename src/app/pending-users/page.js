@@ -9,12 +9,14 @@ import { Skeleton } from 'antd'
 import React, { useContext, useEffect } from 'react'
 
 const PendingUsers = () => {
-    const { loading, approveLoading, approveUser, pendingUsers, fetchPendingUsers } = useContext(Web3Context);
-    console.log("pending x", pendingUsers);
+    const { loading, approveLoading, approveUser, allUsers, getAllUsers} = useContext(Web3Context);
+    console.log("pending x", allUsers);
+    const pendingUsers = allUsers?.filter(user => user?.isActive===false);
+    console.log('p', pendingUsers)
 
     useEffect(() => {
-        fetchPendingUsers()
-    }, [])
+        getAllUsers()
+    }, [pendingUsers?.length])
     return (
         <UserLayout>
             <Breadcrumb title='Pending Users' path='Dashboard / Pending Users' />

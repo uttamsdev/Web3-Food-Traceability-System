@@ -50,7 +50,7 @@ contract FoodTraceabilitySystem {
     }
 
     struct Retail {
-        uint256 retailerId;
+        string retailId;        // Unique retail ID
         uint256 foodId;
         uint256 distributorId;
         string location;
@@ -66,6 +66,7 @@ contract FoodTraceabilitySystem {
 
     // Mappings
     mapping(address => User) public users; // Registered users
+    mapping(string => Retail) allRetails;
     address[] public userAddresses; // To keep track of all user addresses
 
     // Store all crops, food items, distributions, and retailers
@@ -83,7 +84,7 @@ contract FoodTraceabilitySystem {
     event CropAdded(uint256 cropId, string cropName, address farmer);
     event FoodItemAdded(uint256 foodId, string foodName, address producer);
     event DistributionAdded(uint256 distributionId, uint256 foodId, address distributor);
-    event RetailerEntryAdded(uint256 retailerId, uint256 foodId, address retailer);
+    event RetailerEntryAdded(string retailId, uint256 foodId, address retailer);
 
     // Modifiers
     modifier onlyAdmin() {
@@ -133,17 +134,6 @@ contract FoodTraceabilitySystem {
         }
 
         emit UserApproved(_user, users[_user].name);
-    }
-
-    // Get the list of pending users with address, name, and role
-    function getPendingUsers() public view returns (User[] memory) {
-        User[] memory pendingUserList = new User[](pendingUsers.length);
-
-        for (uint256 i = 0; i < pendingUsers.length; i++) {
-            pendingUserList[i] = users[pendingUsers[i]];
-        }
-
-        return pendingUserList;
     }
 
     // Get a list of all users with their details
@@ -205,36 +195,39 @@ contract FoodTraceabilitySystem {
         emit DistributionAdded(distributionId, _foodId, msg.sender);
     }
 
-    // Retailer receives food and adds sale details
-    function addRetailEntry(
-        uint256 _foodId,
-        uint256 _distributorId,
-        string memory _location,
-        string memory _receivedDate,
-        string memory _sellDate,
-        uint256 _price,
-        uint256 _quantity,
-        string memory _expireDate
-    ) public onlyActiveUser onlyRole(Role.Retailer) {
-        uint256 retailerId = allRetailEntries.length + 1;
-        Retail memory newRetailEntry = Retail(retailerId, _foodId, _distributorId, _location, _receivedDate, _sellDate, _price, _quantity, _expireDate);
-        allRetailEntries.push(newRetailEntry);
-        emit RetailerEntryAdded(retailerId, _foodId, msg.sender);
-    }
+function addRetailEntry(
+    string memory _retailId,
+    uint256 _foodId,
+    uint256 _distributorId,
+    string memory _location,
+    string memory _receivedDate,
+    string memory _sellDate,
+    uint256 _price,
+    uint256 _quantity,
+    string memory _expireDate
+) public onlyActiveUser onlyRole(Role.Retailer) {
+    Retail memory newRetailEntry = Retail(_retailId, _foodId, _distributorId, _location, _receivedDate, _sellDate, _price, _quantity, _expireDate);
+    allRetailEntries.push(newRetailEntry);
+    allRetails[_retailId] = newRetailEntry; // Add to the mapping
+    emit RetailerEntryAdded(_retailId, _foodId, msg.sender);
+}
 
-    // Function to view a food trace
-    function getFoodTrace(uint256 _foodId) public view returns (FoodItem memory, Distribution memory, Retail memory, Crop[] memory) {
-        FoodItem memory foodItem = allFoodItems[_foodId - 1];
-        Distribution memory distribution = allDistributions[_foodId - 1];
-        Retail memory retail = allRetailEntries[_foodId - 1];
-        
+
+    // Function to view a food trace using retailId
+    function getFoodTrace(string memory _retailId) public view returns (FoodItem memory, Distribution memory, Retail memory, Crop[] memory) {
+        // require(_retailId > 0 && _retailId <= allRetailEntries.length, "Invalid retail ID");
+
+        Retail memory retailEntry = allRetails[_retailId];
+        FoodItem memory foodItem = allFoodItems[retailEntry.foodId - 1];
+        Distribution memory distribution = allDistributions[retailEntry.distributorId - 1];
+
         // Get crops related to this food item
         Crop[] memory associatedCrops = new Crop[](foodItem.cropIds.length);
         for (uint256 i = 0; i < foodItem.cropIds.length; i++) {
             associatedCrops[i] = allCrops[foodItem.cropIds[i] - 1];
         }
 
-        return (foodItem, distribution, retail, associatedCrops);
+        return (foodItem, distribution, retailEntry, associatedCrops);
     }
 
     // Get all crops

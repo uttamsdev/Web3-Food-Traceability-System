@@ -1,4 +1,5 @@
 
+import { Toaster } from "sonner";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Web3ContextProvider } from "@/context/Web3Context";
@@ -30,11 +31,16 @@ export default function RootLayout({ children }) {
         className={urbanist.className}
       >
         <AntdRegistry>
+          <Toaster position="top-right" richColors closeButton />
           <Web3ContextProvider>
             {children}
           </Web3ContextProvider>
 
         </AntdRegistry>
+        {/* <Toaster position="top-right" richColors closeButton>
+        
+        </Toaster> */}
+
       </body>
     </html>
   );
