@@ -9,8 +9,9 @@ import { LoadingOutlined } from '@ant-design/icons';
 import Dropdown from '@/components/utils/CustomDropdown';
 
 const AddFoods = () => {
-    const { loading, addFoodItem, crops, fetchAllCrops, allUsers, getAllUsers } = useContext(Web3Context);
+    const { loading, addFoodItem, crops, fetchAllCrops, allUsers, getAllUsers, currentAccount} = useContext(Web3Context);
     const [distributors, setDistributors] = useState([]);
+    const [myCrops, setMyCrops] = useState([]);
     const [startDate, setStartDate] = useState('');
     const [expireDate, setExpireDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -101,6 +102,11 @@ const AddFoods = () => {
             setDistributors(distributor);
         }
     }, [allUsers])
+    useEffect(() => {
+        if (crops?.length > 0) {
+            setMyCrops(crops?.filter(crop => (crop?.producer).toLowerCase() === currentAccount));
+        }
+    }, [crops, currentAccount])
     console.log(dropdownValues?.distributor?.wallet)
     return (
         <UserLayout>
@@ -134,7 +140,7 @@ const AddFoods = () => {
                             style={{ width: '100%', borderColor: errors.cropName ? 'red' : '' }}
                             placeholder="Select Crops"
                             onChange={handleChange} // Step 3: Bind handleChange to the onChange event
-                            options={crops?.map(crop => ({
+                            options={myCrops?.map(crop => ({
                                 label: `${crop.cropName} (ID: ${parseInt(crop.cropId?._hex, 16)})`, // Display cropsName and cropsID
                                 value: parseInt(crop.cropId?._hex, 16)// Select cropsID as the value
                             }))}

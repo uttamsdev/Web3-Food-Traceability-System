@@ -14,8 +14,8 @@ const ViewRetailInformationTable = ({ retails, result = false }) => {
                             <th className="th text-left text-sm"><div><div><p>Retailed ID</p> <TableArrowDown /></div></div></th>
                             <th className=" th text-left text-sm"><div>Location <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Price(/Pcs)<TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div className='flex justify-end'>Quantity <TableArrowDown /></div></th>
-                            <th className=" th text-left text-sm "><div className='flex justify-end'>Received Date <TableArrowDown /></div></th>
+                            <th className=" th  text-sm"><div className={`${result && 'flex justify-end'}`}>Quantity <TableArrowDown /></div></th>
+                            <th className=" th text-left text-sm "><div className={`${result && 'flex justify-end'}`}>Received Date <TableArrowDown /></div></th>
                             <th className=" th  text-sm flex justify-end"><div>Sell Date <TableArrowDown /></div></th>
                         </tr>
                     </thead>
@@ -26,8 +26,8 @@ const ViewRetailInformationTable = ({ retails, result = false }) => {
                                     <td className="td text-[#131D26] "><Link href={`/trace-food/${table_data?.retailId}`} className='hover:underline hover:text-blue-700'>{table_data?.retailId}</Link></td>
                                     <td className="td  text-[#131D26]">{table_data?.location}</td>
                                     <td className="td  text-[#131D26]">{parseInt(table_data?.price?._hex, 16)}</td>
-                                    <td className="td  text-[#131D26]">{parseInt(table_data?.quantity?._hex, 16)}</td>
-                                    <td className="td  text-[#131D26] text-end">{table_data?.receivedDate}</td>
+                                    <td className="td  text-[#131D26] ">{parseInt(table_data?.quantity?._hex, 16)}</td>
+                                    <td className="td  text-[#131D26] ">{table_data?.receivedDate}</td>
                                     <td className="td  text-[#131D26] text-end">{table_data?.sellDate}</td>
 
                                 </tr>)

@@ -13,12 +13,13 @@ import { generateRandomUID } from '@/components/lib/RandomUID';
 const AddRetail = () => {
     const [generatedQRCode, setGeneratedQRCode] = useState(null);
     const [retailID, setRetailID] = useState('');
-    const { loading, foodItems, fetchAllFoodItems, distributions, fetchAllDistributions, addRetailEntry, isRetailerAdded, setIsRetailerAdded } = useContext(Web3Context);
+    const { loading, foodItems, fetchAllFoodItems, distributions, fetchAllDistributions, addRetailEntry, isRetailerAdded, setIsRetailerAdded, currentAccount} = useContext(Web3Context);
     const [startDate, setStartDate] = useState('');
+    const [myDestribution, setMyDestribution] = useState([]);
     const [sellDate, setSellDate] = useState('');
     const [expireDate, setExpireDate] = useState('');
     const [dropdownValues, setDropdownValues] = useState({});
-    const distributionIds = distributions?.map(distribution => ({ id: parseInt(distribution?.distributorId, 16) }));
+    const distributionIds = myDestribution?.map(distribution => ({ id: parseInt(distribution?.distributorId, 16) }));
     const [open, setOpen] = useState(false);
     const [formData, setFormData] = useState({
         location: '',
@@ -112,7 +113,11 @@ const AddRetail = () => {
         setRetailID(generateRandomUID());
     }, []);
 
-
+    useEffect(() => {
+        if (distributions?.length > 0) {
+            setMyDestribution(distributions?.filter(item => (item?.retailer)?.toLowerCase() === currentAccount));
+        }
+    }, [distributions, currentAccount])
     return (
         <UserLayout>
             <Breadcrumb title='Add Retail Information' path='Dashboard / Add Retail' />

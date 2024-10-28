@@ -170,7 +170,7 @@ export const Web3ContextProvider = ({ children }) => {
             toast.success('Crop Added Successfully! 🎉', {
                 description: 'Thank for adding your crops.'
             })
-            router.push('/view-crops')
+            router.push('/my-crops')
         } catch (error) {
             console.error("Error adding crop:", error);
         }
@@ -199,7 +199,7 @@ export const Web3ContextProvider = ({ children }) => {
             await transaction.wait();
             console.log("Food item added:", transaction);
             setLoading(false);
-            router.push('/view-foods');
+            router.push('/my-foods');
             toast.success('Food Created! 🎉', {
                 description: 'Your food item successfully created.'
             })
@@ -234,7 +234,7 @@ export const Web3ContextProvider = ({ children }) => {
             toast.success('Food distributed success! 🎉', {
                 description: 'Food successfully distributed.'
             })
-            router.push('/view-distributions');
+            router.push('/my-distributions');
         } catch (error) {
             console.error("Error adding distribution:", error);
         }
