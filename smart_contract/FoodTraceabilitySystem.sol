@@ -47,8 +47,7 @@ contract FoodTraceabilitySystem {
         string sendDate;         // String for date
         uint256 price;
         uint256 quantity;         // Numeric quantity
-        // string expireDate;       // String for date
-        address reseller;
+        address retailer;
         address distributor;
     }
 
@@ -183,18 +182,14 @@ contract FoodTraceabilitySystem {
     // Distributor receives food and adds distribution details
     function addDistribution(
         uint256 _foodId,
-        // string memory _location,
         string memory _receivedDate,
         string memory _sendDate,
         uint256 _price,
         uint256 _quantity,
-
-        // string memory _expireDate,
-        address reseller,
-        address distributor
+        address _retailer
     ) public onlyRole(Role.Distributor) {
         uint256 distributionId = allDistributions.length + 1;
-        Distribution memory newDistribution = Distribution(distributionId, _foodId, _receivedDate, _sendDate, _price, _quantity, reseller, distributor);
+        Distribution memory newDistribution = Distribution(distributionId, _foodId, _receivedDate, _sendDate, _price, _quantity,_retailer, msg.sender);
         allDistributions.push(newDistribution);
         emit DistributionAdded(distributionId, _foodId, msg.sender);
     }
@@ -207,11 +202,10 @@ function addRetailEntry(
     string memory _receivedDate,
     string memory _sellDate,
     uint256 _price,
-    uint256 _quantity,
-    address _retailer
+    uint256 _quantity
     // string memory _expireDate
 ) public  onlyRole(Role.Retailer) {
-    Retail memory newRetailEntry = Retail(_retailId, _foodId, _distributorId, _location, _receivedDate, _sellDate, _price, _quantity, _retailer);
+    Retail memory newRetailEntry = Retail(_retailId, _foodId, _distributorId, _location, _receivedDate, _sellDate, _price, _quantity, msg.sender);
     allRetailEntries.push(newRetailEntry);
     allRetails[_retailId] = newRetailEntry; // Add to the mapping
     emit RetailerEntryAdded(_retailId, _foodId, msg.sender);

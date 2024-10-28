@@ -1,5 +1,4 @@
 'use client'
-import AllUsersTable from '@/components/tables/AllUsersTable'
 import ViewCropsTable from '@/components/tables/ViewCropsTable'
 import Breadcrumb from '@/components/utils/Breadcrumb'
 import NoDataFound from '@/components/utils/NoDataFound'
@@ -11,16 +10,13 @@ import React, { useContext, useEffect, useState } from 'react'
 const ViewCrops = () => {
     const { loading, currentAccount, crops, fetchAllCrops } = useContext(Web3Context);
     const [myCrops, setMyCrops] = useState([]);
-    console.log("crops", crops);
 
     useEffect(() => {
         fetchAllCrops();
     }, [])
     useEffect(() => {
         if (crops?.length > 0) {
-            // alert('hi')
             const myCrop = crops?.filter(crop => (crop?.farmer).toLowerCase() === currentAccount);
-            // setMyCrops(crops?.filter(crop => crop?.farmer === currentAccount));
             setMyCrops(myCrop);
         }
     }, [crops, currentAccount])

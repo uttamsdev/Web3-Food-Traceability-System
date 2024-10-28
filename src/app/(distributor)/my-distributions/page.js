@@ -10,7 +10,6 @@ import React, { useContext, useEffect, useState } from 'react'
 const ViewDistributions = () => {
     const { loading, distributions, fetchAllDistributions, allUsers, getAllUsers, currentAccount } = useContext(Web3Context);
     const [myDistribute, setMyDistribute] = useState('');
-    // console.log("x", distributions);
 
     useEffect(() => {
         fetchAllDistributions();

@@ -10,7 +10,6 @@ import React, { useContext, useEffect, useState } from 'react'
 const MyRetails = () => {
     const { loading, currentAccount, retails, getAllRetails } = useContext(Web3Context);
     const [myRetails, setMyRetails] = useState([]);
-    console.log("crops", retails);
 
     useEffect(() => {
         getAllRetails();
