@@ -8,7 +8,8 @@ import { LoadingOutlined } from '@ant-design/icons';
 import Dropdown from '@/components/utils/CustomDropdown';
 
 const AddDistribute = () => {
-    const { loading, foodItems, fetchAllFoodItems, addDistribution } = useContext(Web3Context);
+    const { loading, foodItems, fetchAllFoodItems, addDistribution, allUsers, getAllUsers } = useContext(Web3Context);
+    const [retailers, setRetailers] = useState([]);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [expireDate, setExpireDate] = useState('');
@@ -34,7 +35,7 @@ const AddDistribute = () => {
             setErrors(prev => ({ ...prev, endDate: '' })); // Clear error if valid
         }
     };
-    
+
     const onChangeExpireDate = (date, dateString) => {
         setExpireDate(dateString);
         if (dateString) {
@@ -58,12 +59,13 @@ const AddDistribute = () => {
     const validateForm = () => {
         const newErrors = {};
         if (!dropdownValues?.food) newErrors.food = 'Food is required';
-        if (!formData.location) newErrors.location = 'Location is required';
+        // if (!formData.location) newErrors.location = 'Location is required';
         if (!startDate) newErrors.startDate = 'Received date is required';
         if (!endDate) newErrors.endDate = 'Send date is required';
-        if (!expireDate) newErrors.expireDate = 'Expire date is required';
+        // if (!expireDate) newErrors.expireDate = 'Expire date is required';
         if (!formData.price) newErrors.price = 'Price is required';
         if (!formData.quantity) newErrors.quantity = 'Quantity is required';
+        if (!dropdownValues?.retailer) newErrors.quantity = 'Retailer is required';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -74,12 +76,20 @@ const AddDistribute = () => {
         if (!validateForm()) return; // Block submission if validation fails
 
         // Perform any form submission actions here
-        addDistribution(parseInt(dropdownValues?.food?.foodId?._hex, 16), formData.location, startDate, endDate, formData.price, formData.quantity, expireDate);
+        addDistribution(parseInt(dropdownValues?.food?.foodId?._hex, 16), startDate, endDate, formData.price, formData.quantity, dropdownValues?.retailer?.wallet);
     };
 
     useEffect(() => {
         fetchAllFoodItems();
+        getAllUsers()
+
     }, []);
+    useEffect(() => {
+        if (allUsers?.length) {
+            const retailer = allUsers?.filter(user => user.role === 4);
+            setRetailers(retailer);
+        }
+    }, [allUsers])
     return (
         <UserLayout>
             <Breadcrumb title='Add Distribution' path='Dashboard / Add Distribution' />
@@ -92,8 +102,12 @@ const AddDistribute = () => {
                     <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={foodItems} searchBy={"foodName"} fieldName="food" placeholder='Select Food' />
                     {errors.food && <p className='text-red-500 text-sm'>{errors.food}</p>}
                 </div>
-
                 <div className='flex flex-col gap-0.5'>
+                    <label className='text-base font-medium'>Retail to(/Retailer)</label>
+                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={retailers || []} searchBy={"name"} fieldName="retailer" placeholder='Select Retailer' />
+                    {errors.distributor && <p className='text-red-500 text-sm'>{errors.producer}</p>}
+                </div>
+                {/* <div className='flex flex-col gap-0.5'>
                     <label className='text-base font-medium'>Location</label>
                     <Input
                         placeholder='Location'
@@ -103,7 +117,7 @@ const AddDistribute = () => {
                         style={{ borderColor: errors.location ? 'red' : '' }}
                     />
                     {errors.location && <p className='text-red-500 text-sm'>{errors.location}</p>}
-                </div>
+                </div> */}
                 <div className='flex flex-col gap-0.5'>
                     <label className='text-base font-medium'>Received Date</label>
                     <DatePicker
@@ -145,15 +159,6 @@ const AddDistribute = () => {
                         style={{ borderColor: errors.quantity ? 'red' : '' }}
                     />
                     {errors.quantity && <p className='text-red-500 text-sm'>{errors.quantity}</p>}
-                </div>
-                <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Expire Date</label>
-                    <DatePicker
-                        onChange={onChangeExpireDate}
-                        className='w-full'
-                        style={{ borderColor: errors.expireDate ? 'red' : '' }}
-                    />
-                    {errors.expireDate && <p className='text-red-500 text-sm'>{errors.expireDate}</p>}
                 </div>
                 <button
                     className='bg-[#A1045A] mt-1 text-white px-4 py-1 font-medium text-center rounded'

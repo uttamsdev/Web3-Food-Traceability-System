@@ -27,7 +27,7 @@ const ViewMyFoods = () => {
             <Breadcrumb title='My Food List' path='Dashboard / My Foods' />
             {
                 loading ? <div className='bg-white px-4 py-4 mt-4'><Skeleton active /> </div> :
-                    foodItems?.length > 0 ? <ViewFoodsTable users={allUsers} foods={foodItems} /> : <NoDataFound />
+                    foodItems?.length > 0 ? <ViewFoodsTable users={allUsers} foods={myFoods} /> : <NoDataFound />
 
             }
         </UserLayout>

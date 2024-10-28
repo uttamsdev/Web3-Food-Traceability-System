@@ -26,6 +26,7 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
       { label: 'All Crops List', path: '/view-crops', icon: <ListIcon /> },
       { label: 'All Foods List', path: '/view-foods', icon: <ListViewIcon /> },
       { label: 'Distributions List', path: '/view-distributions', icon: <ListIcon /> },
+      { label: 'All Retail List', path: '/view-retails', icon: <ListIcon /> },
       { label: 'All Users', path: '/all-users', icon: <AllUsersIcon /> },
     ],
     Farmer: [
@@ -42,13 +43,16 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
       { label: 'My Foods List', path: '/my-foods', icon: <ListViewIcon /> },
       { label: 'View All Crops', path: '/view-crops', icon: <ListIcon /> },
       { label: 'All Distributions List', path: '/view-distributions', icon: <List3Icon /> },
+      { label: 'All Retail List', path: '/view-retails', icon: <ListIcon /> },
+
 
     ],
     Distributor: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Add Distribution', path: '/add-distribute', icon: <PlusIcon /> },
       { label: 'All Foods List', path: '/view-foods', icon: <List3Icon /> },
-      { label: 'Distributions List', path: '/view-distributions', icon: <ListViewIcon /> },
+      { label: 'All Distributions List', path: '/view-distributions', icon: <ListViewIcon /> },
+      { label: 'My Distributions List', path: '/my-distributions', icon: <ListViewIcon /> },
     ],
     Retailer: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },

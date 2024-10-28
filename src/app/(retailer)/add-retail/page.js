@@ -69,7 +69,7 @@ const AddRetail = () => {
         if (!formData.location) newErrors.location = 'Location is required';
         if (!startDate) newErrors.startDate = 'Received date is required';
         if (!sellDate) newErrors.sellDate = 'Sell date is required';
-        if (!expireDate) newErrors.expireDate = 'Expire date is required';
+        // if (!expireDate) newErrors.expireDate = 'Expire date is required';
         if (!formData.price) newErrors.price = 'Price is required';
         if (!formData.quantity) newErrors.quantity = 'Quantity is required';
 
@@ -103,7 +103,6 @@ const AddRetail = () => {
             sellDate,
             formData?.price,
             formData?.quantity,
-            expireDate
         );
     };
 
@@ -201,7 +200,7 @@ const AddRetail = () => {
                     />
                     {errors.quantity && <p className='text-red-500 text-sm'>{errors.quantity}</p>}
                 </div>
-                <div className='flex flex-col gap-0.5'>
+                {/* <div className='flex flex-col gap-0.5'>
                     <label className='text-base font-medium'>Expire Date</label>
                     <DatePicker
                         onChange={onChangeExpireDate}
@@ -209,7 +208,7 @@ const AddRetail = () => {
                         style={{ borderColor: errors.expireDate ? 'red' : '' }}
                     />
                     {errors.expireDate && <p className='text-red-500 text-sm'>{errors.expireDate}</p>}
-                </div>
+                </div> */}
                 <button
                     className='bg-[#A1045A] mt-1 text-white px-4 py-1 font-medium text-center rounded'
                     type='submit'
