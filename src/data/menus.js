@@ -19,17 +19,15 @@ export const menus = {
     Producer: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Add Foods', path: '/add-foods', icon: <PlusIcon /> },
-      { label: 'All Foods List', path: '/view-foods', icon: <List3Icon /> },
       { label: 'My Foods List', path: '/my-foods', icon: <ListViewIcon /> },
       { label: 'View All Crops', path: '/view-crops', icon: <ListIcon /> },
-      { label: 'All Distributions List', path: '/view-distributions', icon: <List3Icon /> },
+      { label: 'All Distributions List', path: '/all-distributions', icon: <List3Icon /> },
       { label: 'All Retail List', path: '/view-retails', icon: <ListIcon /> },
     ],
     Distributor: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Add Distribution', path: '/add-distribute', icon: <PlusIcon /> },
       { label: 'All Foods List', path: '/view-foods', icon: <List3Icon /> },
-      { label: 'All Distributions List', path: '/view-distributions', icon: <ListIcon /> },
       { label: 'My Distributions List', path: '/my-distributions', icon: <ListViewIcon /> },
     ],
     Retailer: [
