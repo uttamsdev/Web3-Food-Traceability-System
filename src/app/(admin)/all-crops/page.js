@@ -8,25 +8,19 @@ import { Skeleton } from 'antd'
 import React, { useContext, useEffect, useState } from 'react'
 
 const ViewCrops = () => {
-    const { loading, crops, fetchAllCrops, currentAccount } = useContext(Web3Context);
-    const [myCrops, setMyCrops] = useState([]);
+    const { loading, crops, fetchAllCrops } = useContext(Web3Context);
     console.log("crops", crops);
 
     useEffect(() => {
         fetchAllCrops();
     }, [])
 
-    useEffect(() => {
-        if (crops?.length > 0) {
-            setMyCrops(crops?.filter(crop => (crop?.producer).toLowerCase() === currentAccount));
-        }
-    }, [crops, currentAccount])
     return (
         <UserLayout>
             <Breadcrumb title='View Crop List' path='Dashboard / View Crops' />
             {
                 loading ? <div className='bg-white px-4 py-4 mt-4'><Skeleton active /> </div> :
-                    myCrops?.length > 0 ? <ViewCropsTable crops={myCrops} /> : <NoDataFound />
+                    crops?.length > 0 ? <ViewCropsTable crops={crops} /> : <NoDataFound />
 
             }
         </UserLayout>

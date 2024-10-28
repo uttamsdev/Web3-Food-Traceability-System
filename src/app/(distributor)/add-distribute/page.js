@@ -8,10 +8,12 @@ import { LoadingOutlined } from '@ant-design/icons';
 import Dropdown from '@/components/utils/CustomDropdown';
 
 const AddDistribute = () => {
-    const { loading, foodItems, fetchAllFoodItems, addDistribution, allUsers, getAllUsers } = useContext(Web3Context);
+    const { loading, foodItems, fetchAllFoodItems, addDistribution, allUsers, getAllUsers, currentAccount } = useContext(Web3Context);
     const [retailers, setRetailers] = useState([]);
     const [startDate, setStartDate] = useState('');
-    const [endDate, setEndDate] = useState('');
+    const [endDate, setEndDate] = useState('')
+    const [myFoods, setMyFoods] = useState([]);
+
     const [expireDate, setExpireDate] = useState('');
     const [dropdownValues, setDropdownValues] = useState({});
     const [formData, setFormData] = useState({
@@ -90,6 +92,13 @@ const AddDistribute = () => {
             setRetailers(retailer);
         }
     }, [allUsers])
+
+    useEffect(() => {
+        if (foodItems?.length > 0) {
+            setMyFoods(foodItems?.filter(item => (item?.distributor)?.toLowerCase() === currentAccount))
+        }
+    }, [foodItems, currentAccount])
+
     return (
         <UserLayout>
             <Breadcrumb title='Add Distribution' path='Dashboard / Add Distribution' />
@@ -99,7 +108,7 @@ const AddDistribute = () => {
             >
                 <div className='flex flex-col gap-0.5'>
                     <label className='text-base font-medium'>Select Food</label>
-                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={foodItems} searchBy={"foodName"} fieldName="food" placeholder='Select Food' />
+                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={myFoods || []} searchBy={"foodName"} fieldName="food" placeholder='Select Food' />
                     {errors.food && <p className='text-red-500 text-sm'>{errors.food}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>

@@ -14,7 +14,7 @@ const ViewDistributionTable = ({ distributions, result = false }) => {
                             <th className="th text-left text-sm"><div><div><p>Food ID</p> <TableArrowDown /></div></div></th>
                             <th className=" th text-left text-sm"><div>Received Date <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Send Date <TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div className={`flex ${result ? 'flex-end' : 'flex-start'}`}>Price <TableArrowDown /></div></th>
+                            <th className=" th  text-sm"><div className={`${result && 'w-[50px] ml-auto'}`}>Price <TableArrowDown /></div></th>
                             <th className=" th  text-sm flex justify-end"><div>Quantity <TableArrowDown /></div></th>
                         </tr>
                     </thead>
