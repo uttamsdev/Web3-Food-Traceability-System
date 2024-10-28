@@ -1,16 +1,19 @@
 'use client';
 
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Breadcrumb from '@/components/utils/Breadcrumb';
 import UserLayout from '@/layouts/UserLayout';
 import { DatePicker, Input, Spin } from 'antd';
 import { Web3Context } from '@/context/Web3Context';
 import { LoadingOutlined } from '@ant-design/icons';
+import Dropdown from '@/components/utils/CustomDropdown';
 
 const AddCrop = () => {
-    const { loading, addCrop } = useContext(Web3Context);
+    const { loading, addCrop, getAllUsers, allUsers } = useContext(Web3Context);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [dropdownValues, setDropdownValues] = useState({});
+    const [producers, setProducers ] = useState([]);
     const [formData, setFormData] = useState({
         cropName: '',
         location: '',
@@ -55,6 +58,7 @@ const AddCrop = () => {
         if (!endDate) newErrors.endDate = 'Farming end date is required';
         if (!formData.price) newErrors.price = 'Price is required';
         if (!formData.quantity) newErrors.quantity = 'Quantity is required';
+        if(!dropdownValues?.producer) newErrors.producer = 'Producer is required'
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -65,8 +69,19 @@ const AddCrop = () => {
         if (!validateForm()) return; // Block submission if validation fails
 
         // Perform any form submission actions here
-        addCrop(formData.cropName, formData.location, startDate, endDate, formData.price, formData.quantity);
+        addCrop(formData.cropName, formData.location, startDate, endDate, formData.price, formData.quantity, dropdownValues?.producer?.wallet);
     };
+
+    useEffect(() => {
+        getAllUsers();
+    },[])
+
+    useEffect(() => {
+        if(allUsers?.length){
+            const producer = allUsers?.filter(user => user.role === 2);
+            setProducers(producer);
+        }
+    },[allUsers])
 
     return (
         <UserLayout>
@@ -116,7 +131,7 @@ const AddCrop = () => {
                     {errors.endDate && <p className='text-red-500 text-sm'>{errors.endDate}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Price</label>
+                    <label className='text-base font-medium'>Price Per KG</label>
                     <Input
                         placeholder='Price'
                         name='price'
@@ -128,15 +143,21 @@ const AddCrop = () => {
                     {errors.price && <p className='text-red-500 text-sm'>{errors.price}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Quantity</label>
+                    <label className='text-base font-medium'>Quantity(KG)</label>
                     <Input
                         placeholder='Quantity'
                         name='quantity'
                         value={formData.quantity}
                         onChange={handleInputChange}
                         style={{ borderColor: errors.quantity ? 'red' : '' }}
+                        type='number'
                     />
                     {errors.quantity && <p className='text-red-500 text-sm'>{errors.quantity}</p>}
+                </div>
+                <div className='flex flex-col gap-0.5'>
+                    <label className='text-base font-medium'>Sold to(Producer)</label>
+                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={producers || []} searchBy={"name"} fieldName="producer" placeholder='Select Producer' />
+                    {errors.producer && <p className='text-red-500 text-sm'>{errors.producer}</p>}
                 </div>
                 <button
                     className='bg-[#A1045A] mt-1 text-white px-4 py-1 font-medium text-center rounded'

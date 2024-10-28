@@ -158,11 +158,11 @@ export const Web3ContextProvider = ({ children }) => {
     };
 
     // Farmer adds a crop
-    const addCrop = async (cropName, location, startDate, endDate, price, quantity) => {
+    const addCrop = async (cropName, location, startDate, endDate, price, quantity, _producer) => {
         try {
             setLoading(true);
             const contract = createEthereumContract();
-            const transaction = await contract.addCrop(cropName, location, startDate, endDate, price, quantity);
+            const transaction = await contract.addCrop(cropName, location, startDate, endDate, price, quantity, _producer);
             await transaction.wait();
             console.log("Crop added:", transaction);
             setLoading(false);

@@ -90,7 +90,6 @@ const AddDistribute = () => {
                 <div className='flex flex-col gap-0.5'>
                     <label className='text-base font-medium'>Select Food</label>
                     <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={foodItems} searchBy={"foodName"} fieldName="food" placeholder='Select Food' />
-
                     {errors.food && <p className='text-red-500 text-sm'>{errors.food}</p>}
                 </div>
 

@@ -15,8 +15,8 @@ const ViewCropsTable = ({ crops, wallet }) => {
                             <th className=" th text-left text-sm"><div>Farming Start Date <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Farming End Date <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Location <TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div>Price <TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div>Quantity <TableArrowDown /></div></th>
+                            <th className=" th  text-sm"><div>Price(/KG)<TableArrowDown /></div></th>
+                            <th className=" th  text-sm"><div>Quantity(KG)<TableArrowDown /></div></th>
 
                         </tr>
                     </thead>
@@ -29,7 +29,7 @@ const ViewCropsTable = ({ crops, wallet }) => {
                                 <td className="td  text-[#131D26]">{table_data?.farmingEndDate}</td>
                                 <td className="td  text-[#131D26]">{table_data?.location}</td>
                                 <td className="td  text-[#131D26]">{parseInt(table_data?.price?._hex, 16)}</td>
-                                <td className="td  text-[#131D26]">{table_data?.quantity}</td>
+                                <td className="td  text-[#131D26]">{parseInt(table_data?.quantity?._hex, 16)}</td>
                             </tr>)
                         }
                     </tbody>

@@ -21,7 +21,8 @@ contract FoodTraceabilitySystem {
         string farmingStartDate; // String for date
         string farmingEndDate;   // String for date
         uint256 price;
-        string quantity;         // Numeric quantity
+        uint256 quantity;         // Numeric quantity
+        address producer;
         address farmer;
     }
 
@@ -36,17 +37,19 @@ contract FoodTraceabilitySystem {
         uint256 price;
         uint256 quantity;         // Numeric quantity
         string expireDate;       // String for date
+        address distributor;
     }
 
     struct Distribution {
         uint256 distributorId;
         uint256 foodId;
-        string location;
         string receivedDate;     // String for date
         string sendDate;         // String for date
         uint256 price;
         uint256 quantity;         // Numeric quantity
-        string expireDate;       // String for date
+        // string expireDate;       // String for date
+        address reseller;
+        address distributor;
     }
 
     struct Retail {
@@ -58,7 +61,8 @@ contract FoodTraceabilitySystem {
         string sellDate;         // String for date
         uint256 price;
         uint256 quantity;         // Numeric quantity
-        string expireDate;       // String for date
+        // string expireDate;       // String for date
+        address retailer;
     }
 
     // Admin
@@ -92,11 +96,6 @@ contract FoodTraceabilitySystem {
         _;
     }
 
-    modifier onlyActiveUser() {
-        require(users[msg.sender].isActive, "User not active");
-        _;
-    }
-
     modifier onlyRole(Role _role) {
         require(users[msg.sender].role == uint8(_role), "Invalid role for this action");
         _;
@@ -119,8 +118,8 @@ contract FoodTraceabilitySystem {
 
     // Admin approves user
     function approveUser(address _user) public onlyAdmin {
-        require(users[_user].wallet != address(0), "User does not exist");
-        require(!users[_user].isActive, "User already active");
+        // require(users[_user].wallet != address(0), "User does not exist");
+        // require(!users[_user].isActive, "User already active");
 
         users[_user].isActive = true;
 
@@ -154,10 +153,11 @@ contract FoodTraceabilitySystem {
         string memory _farmingStartDate,
         string memory _farmingEndDate,
         uint256 _price,
-        string memory _quantity
-    ) public onlyActiveUser onlyRole(Role.Farmer) {
+        uint256 _quantity,
+        address _producer
+    ) public onlyRole(Role.Farmer) {
         uint256 cropId = allCrops.length + 1;
-        Crop memory newCrop = Crop(cropId, _cropName, _location, _farmingStartDate, _farmingEndDate, _price, _quantity, msg.sender);
+        Crop memory newCrop = Crop(cropId, _cropName, _location, _farmingStartDate, _farmingEndDate, _price, _quantity, _producer, msg.sender);
         allCrops.push(newCrop);
         emit CropAdded(cropId, _cropName, msg.sender);
     }
@@ -171,10 +171,11 @@ contract FoodTraceabilitySystem {
         string memory _endDate,
         uint256 _price,
         uint256 _quantity,
-        string memory _expireDate
-    ) public onlyActiveUser onlyRole(Role.Producer) {
+        string memory _expireDate,
+        address distributor
+    ) public onlyRole(Role.Producer) {
         uint256 foodId = allFoodItems.length + 1;
-        FoodItem memory newFoodItem = FoodItem(foodId, _foodName, _cropIds, msg.sender, _location, _startDate, _endDate, _price, _quantity, _expireDate);
+        FoodItem memory newFoodItem = FoodItem(foodId, _foodName, _cropIds, msg.sender, _location, _startDate, _endDate, _price, _quantity, _expireDate, distributor);
         allFoodItems.push(newFoodItem);
         emit FoodItemAdded(foodId, _foodName, msg.sender);
     }
@@ -182,15 +183,18 @@ contract FoodTraceabilitySystem {
     // Distributor receives food and adds distribution details
     function addDistribution(
         uint256 _foodId,
-        string memory _location,
+        // string memory _location,
         string memory _receivedDate,
         string memory _sendDate,
         uint256 _price,
         uint256 _quantity,
-        string memory _expireDate
-    ) public onlyActiveUser onlyRole(Role.Distributor) {
+
+        // string memory _expireDate,
+        address reseller,
+        address distributor
+    ) public onlyRole(Role.Distributor) {
         uint256 distributionId = allDistributions.length + 1;
-        Distribution memory newDistribution = Distribution(distributionId, _foodId, _location, _receivedDate, _sendDate, _price, _quantity, _expireDate);
+        Distribution memory newDistribution = Distribution(distributionId, _foodId, _receivedDate, _sendDate, _price, _quantity, reseller, distributor);
         allDistributions.push(newDistribution);
         emit DistributionAdded(distributionId, _foodId, msg.sender);
     }
@@ -204,9 +208,10 @@ function addRetailEntry(
     string memory _sellDate,
     uint256 _price,
     uint256 _quantity,
-    string memory _expireDate
-) public onlyActiveUser onlyRole(Role.Retailer) {
-    Retail memory newRetailEntry = Retail(_retailId, _foodId, _distributorId, _location, _receivedDate, _sellDate, _price, _quantity, _expireDate);
+    address _retailer
+    // string memory _expireDate
+) public  onlyRole(Role.Retailer) {
+    Retail memory newRetailEntry = Retail(_retailId, _foodId, _distributorId, _location, _receivedDate, _sellDate, _price, _quantity, _retailer);
     allRetailEntries.push(newRetailEntry);
     allRetails[_retailId] = newRetailEntry; // Add to the mapping
     emit RetailerEntryAdded(_retailId, _foodId, msg.sender);
@@ -244,4 +249,10 @@ function addRetailEntry(
     function getAllDistributions() public view returns (Distribution[] memory) {
         return allDistributions;
     }
+
+    // Get all retail entries
+function getAllRetails() public view returns (Retail[] memory) {
+    return allRetailEntries;
+}
+  
 }
