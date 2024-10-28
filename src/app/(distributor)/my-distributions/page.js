@@ -16,7 +16,7 @@ const ViewDistributions = () => {
         fetchAllDistributions();
         getAllUsers();
     }, [])
-    useState(() => {
+    useEffect(() => {
         if (distributions?.length > 0) {
             setMyDistribute(distributions?.filter(item => item?.distributor?.toLowerCase() === currentAccount))
         }

@@ -59,6 +59,7 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
       { label: 'Distributions List', path: '/view-distributions', icon: <ListViewIcon /> },
       { label: 'Add Retail', path: '/add-retail', icon: <PlusIcon /> },
       { label: 'All Foods List', path: '/view-foods', icon: <List3Icon /> },
+      { label: 'My Retails List', path: '/my-retails', icon: <List3Icon /> },
 
     ],
   };

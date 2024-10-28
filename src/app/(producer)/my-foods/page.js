@@ -1,7 +1,5 @@
 'use client'
-import AllUsersTable from '@/components/tables/AllUsersTable'
 import ViewFoodsTable from '@/components/tables/VewFoodsTable'
-import ViewCropsTable from '@/components/tables/ViewCropsTable'
 import Breadcrumb from '@/components/utils/Breadcrumb'
 import NoDataFound from '@/components/utils/NoDataFound'
 import { Web3Context } from '@/context/Web3Context'
@@ -17,7 +15,7 @@ const ViewMyFoods = () => {
         fetchAllFoodItems();
     }, [])
 
-    useState(() => {
+    useEffect(() => {
         if (foodItems?.length > 0) {
             setMyFoods(foodItems?.filter(item => item?.producer?.toLowerCase() === currentAccount))
         }

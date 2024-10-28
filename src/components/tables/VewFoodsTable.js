@@ -19,7 +19,7 @@ const ViewFoodsTable = ({ foods, users, result = false }) => {
                             <th className=" th  text-sm"><div>Producer <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Price(/Pcs) <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Total Quantity <TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div>Expire Date <TableArrowDown /></div></th>
+                            <th className=" th  text-sm flex justify-end"><div>Expire Date <TableArrowDown /></div></th>
 
                         </tr>
                     </thead>
@@ -37,7 +37,7 @@ const ViewFoodsTable = ({ foods, users, result = false }) => {
                                     </td>
                                     <td className="td  text-[#131D26]">{parseInt(table_data?.price?._hex, 16)}</td>
                                     <td className="td  text-[#131D26]">{parseInt(table_data?.quantity?._hex, 16)}</td>
-                                    <td className="td  text-[#131D26]">{table_data?.expireDate}</td>
+                                    <td className="td  text-[#131D26] text-end">{table_data?.expireDate}</td>
 
                                 </tr>)
                                 :
@@ -52,7 +52,7 @@ const ViewFoodsTable = ({ foods, users, result = false }) => {
                                     </td>
                                     <td className="td  text-[#131D26]">{parseInt(foods?.price?._hex, 16)}</td>
                                     <td className="td  text-[#131D26]">{parseInt(foods?.quantity?._hex, 16)}</td>
-                                    <td className="td  text-[#131D26]">{foods?.expireDate}</td>
+                                    <td className="td  text-[#131D26] text-end">{foods?.expireDate}</td>
 
                                 </tr>
                         }

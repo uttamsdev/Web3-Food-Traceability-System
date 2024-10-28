@@ -71,7 +71,7 @@ const TraceFood = () => {
                         <Skeleton active />
                     </div>
                 ) : foodTrace ? (
-                    foodTrace.length > 0 ? (
+                    foodTrace?.length > 0 ? (
                         <div className='container mx-auto mt-8'>
                             <div>
                                 <p className='underline text-[#A1045A] text-base font-semibold mb-[-8px]'>

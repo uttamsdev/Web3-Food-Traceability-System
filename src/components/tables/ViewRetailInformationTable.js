@@ -14,9 +14,9 @@ const ViewRetailInformationTable = ({ retails, result = false }) => {
                             <th className="th text-left text-sm"><div><div><p>Retailed ID</p> <TableArrowDown /></div></div></th>
                             <th className=" th text-left text-sm"><div>Location <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Price(/Pcs)<TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div>Quantity <TableArrowDown /></div></th>
-                            <th className=" th text-left text-sm"><div>Received Date <TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div>Sell Date <TableArrowDown /></div></th>
+                            <th className=" th  text-sm"><div className='flex justify-end'>Quantity <TableArrowDown /></div></th>
+                            <th className=" th text-left text-sm "><div className='flex justify-end'>Received Date <TableArrowDown /></div></th>
+                            <th className=" th  text-sm flex justify-end"><div>Sell Date <TableArrowDown /></div></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -27,8 +27,8 @@ const ViewRetailInformationTable = ({ retails, result = false }) => {
                                     <td className="td  text-[#131D26]">{table_data?.location}</td>
                                     <td className="td  text-[#131D26]">{parseInt(table_data?.price?._hex, 16)}</td>
                                     <td className="td  text-[#131D26]">{parseInt(table_data?.quantity?._hex, 16)}</td>
-                                    <td className="td  text-[#131D26]">{table_data?.receivedDate}</td>
-                                    <td className="td  text-[#131D26]">{table_data?.sellDate}</td>
+                                    <td className="td  text-[#131D26] text-end">{table_data?.receivedDate}</td>
+                                    <td className="td  text-[#131D26] text-end">{table_data?.sellDate}</td>
 
                                 </tr>)
                                 :
@@ -36,9 +36,9 @@ const ViewRetailInformationTable = ({ retails, result = false }) => {
                                     <td className="td text-[#131D26] ">{retails?.retailId}</td>
                                     <td className="td  text-[#131D26]">{retails?.location}</td>
                                     <td className="td  text-[#131D26]">{parseInt(retails?.price?._hex, 16)}</td>
-                                    <td className="td  text-[#131D26]">{parseInt(retails?.quantity?._hex, 16)}</td>
-                                    <td className="td  text-[#131D26]">{retails?.receivedDate}</td>
-                                    <td className="td  text-[#131D26]">{retails?.sellDate}</td>
+                                    <td className="td  text-[#131D26] text-end">{parseInt(retails?.quantity?._hex, 16)}</td>
+                                    <td className="td  text-[#131D26] text-end">{retails?.receivedDate}</td>
+                                    <td className="td  text-[#131D26] text-end">{retails?.sellDate}</td>
 
                                 </tr>
                         }
