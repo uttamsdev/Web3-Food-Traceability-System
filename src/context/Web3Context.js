@@ -190,11 +190,11 @@ export const Web3ContextProvider = ({ children }) => {
     };
 
     // Producer adds a food item
-    const addFoodItem = async (foodName, cropIds, location, startDate, endDate, price, quantity, expireDate) => {
+    const addFoodItem = async (foodName, cropIds, location, startDate, endDate, price, quantity, expireDate, distributor) => {
         try {
             setLoading(true);
             const contract = createEthereumContract();
-            const transaction = await contract.addFoodItem(foodName, cropIds, location, startDate, endDate, price, quantity, expireDate);
+            const transaction = await contract.addFoodItem(foodName, cropIds, location, startDate, endDate, price, quantity, expireDate, distributor);
             await transaction.wait();
             console.log("Food item added:", transaction);
             setLoading(false);

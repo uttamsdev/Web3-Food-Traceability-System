@@ -17,8 +17,8 @@ const ViewFoodsTable = ({ foods, users, result = false }) => {
                             <th className=" th  text-sm"><div>End Date <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Location <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Producer <TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div>Price <TableArrowDown /></div></th>
-                            <th className=" th  text-sm"><div>Quantity <TableArrowDown /></div></th>
+                            <th className=" th  text-sm"><div>Price(/Pcs) <TableArrowDown /></div></th>
+                            <th className=" th  text-sm"><div>Total Quantity <TableArrowDown /></div></th>
                             <th className=" th  text-sm"><div>Expire Date <TableArrowDown /></div></th>
 
                         </tr>

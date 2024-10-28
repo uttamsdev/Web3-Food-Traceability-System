@@ -23,35 +23,38 @@ const Sidebar = ({ setSidebar, sidebar, role }) => {
     Admin: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Pending Users', path: '/pending-users', icon: <PendingUsersIcon /> },
-      { label: 'Crops List', path: '/view-crops', icon: <ListIcon /> },
-      { label: 'Foods List', path: '/view-foods', icon: <ListViewIcon /> },
+      { label: 'All Crops List', path: '/view-crops', icon: <ListIcon /> },
+      { label: 'All Foods List', path: '/view-foods', icon: <ListViewIcon /> },
       { label: 'Distributions List', path: '/view-distributions', icon: <ListIcon /> },
       { label: 'All Users', path: '/all-users', icon: <AllUsersIcon /> },
     ],
     Farmer: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Add Crops', path: '/add-crops', icon: <PlusIcon /> }, ,
-      { label: 'Crops List', path: '/view-crops', icon: <ListViewIcon /> },
+      { label: 'All Crops List', path: '/view-crops', icon: <ListViewIcon /> },
+      { label: 'My Crops', path: '/my-crops', icon: <ListViewIcon /> },
+
     ],
     Producer: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Add Foods', path: '/add-foods', icon: <PlusIcon /> },
-      { label: 'Foods List', path: '/view-foods', icon: <ListViewIcon /> },
-      { label: 'View Crops', path: '/view-crops', icon: <ListIcon /> },
-      { label: 'Distributions List', path: '/view-distributions', icon: <List3Icon /> },
+      { label: 'All Foods List', path: '/view-foods', icon: <ListViewIcon /> },
+      { label: 'My Foods List', path: '/my-foods', icon: <ListViewIcon /> },
+      { label: 'View All Crops', path: '/view-crops', icon: <ListIcon /> },
+      { label: 'All Distributions List', path: '/view-distributions', icon: <List3Icon /> },
 
     ],
     Distributor: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Add Distribution', path: '/add-distribute', icon: <PlusIcon /> },
-      { label: 'Foods List', path: '/view-foods', icon: <List3Icon /> },
+      { label: 'All Foods List', path: '/view-foods', icon: <List3Icon /> },
       { label: 'Distributions List', path: '/view-distributions', icon: <ListViewIcon /> },
     ],
     Retailer: [
       { label: 'Dashboard', path: '/dashboard', icon: <DashboardIcon /> },
       { label: 'Distributions List', path: '/view-distributions', icon: <ListViewIcon /> },
       { label: 'Add Retail', path: '/add-retail', icon: <PlusIcon /> },
-      { label: 'Foods List', path: '/view-foods', icon: <List3Icon /> },
+      { label: 'All Foods List', path: '/view-foods', icon: <List3Icon /> },
 
     ],
   };

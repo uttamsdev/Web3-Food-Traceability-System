@@ -9,8 +9,8 @@ import { LoadingOutlined } from '@ant-design/icons';
 import Dropdown from '@/components/utils/CustomDropdown';
 
 const AddFoods = () => {
-    const { loading, addFoodItem, crops, fetchAllCrops } = useContext(Web3Context);
-
+    const { loading, addFoodItem, crops, fetchAllCrops, allUsers, getAllUsers } = useContext(Web3Context);
+    const [distributors, setDistributors] = useState([]);
     const [startDate, setStartDate] = useState('');
     const [expireDate, setExpireDate] = useState('');
     const [endDate, setEndDate] = useState('');
@@ -76,6 +76,7 @@ const AddFoods = () => {
         if (selectedCrops.length == 0) newErrors.cropName = 'No Crops is selected';
         if (!formData.price) newErrors.price = 'Price is required';
         if (!formData.quantity) newErrors.quantity = 'Quantity is required';
+        if (!dropdownValues?.distributor) newErrors.quantity = 'Distributor is required';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -86,14 +87,21 @@ const AddFoods = () => {
         if (!validateForm()) return; // Block submission if validation fails
 
         // Perform any form submission actions here
-        addFoodItem(formData.foodName, selectedCrops, formData.location, startDate, endDate, formData.price, formData.quantity, expireDate);
+        addFoodItem(formData.foodName, selectedCrops, formData.location, startDate, endDate, formData.price, formData.quantity, expireDate, dropdownValues?.distributor?.wallet);
     };
 
     useEffect(() => {
         fetchAllCrops();
+        getAllUsers();
     }, [])
-
-    console.log(dropdownValues)
+    
+    useEffect(() => {
+        if (allUsers?.length) {
+            const distributor = allUsers?.filter(user => user.role === 3);
+            setDistributors(distributor);
+        }
+    }, [allUsers])
+    console.log(dropdownValues?.distributor?.wallet)
     return (
         <UserLayout>
             <Breadcrumb title='Add Food' path='Dashboard / Add Foods' />
@@ -111,6 +119,11 @@ const AddFoods = () => {
                         style={{ borderColor: errors.foodName ? 'red' : '' }}
                     />
                     {errors.foodName && <p className='text-red-500 text-sm'>{errors.foodName}</p>}
+                </div>
+                <div className='flex flex-col gap-0.5'>
+                    <label className='text-base font-medium'>Distribute to(Distributor)</label>
+                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={distributors || []} searchBy={"name"} fieldName="distributor" placeholder='Select Distributor' />
+                    {errors.distributor && <p className='text-red-500 text-sm'>{errors.producer}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
                     <label className='text-base font-medium'>Select Crops</label>
@@ -134,7 +147,7 @@ const AddFoods = () => {
 
 
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Location</label>
+                    <label className='text-base font-medium'>Production Location</label>
                     <Input
                         placeholder='Location'
                         name='location'
@@ -163,7 +176,7 @@ const AddFoods = () => {
                     {errors.endDate && <p className='text-red-500 text-sm'>{errors.endDate}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Price</label>
+                    <label className='text-base font-medium'>Price(/Pcs)</label>
                     <Input
                         placeholder='Price'
                         name='price'

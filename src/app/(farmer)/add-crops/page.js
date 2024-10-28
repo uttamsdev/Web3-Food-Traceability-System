@@ -13,7 +13,7 @@ const AddCrop = () => {
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
     const [dropdownValues, setDropdownValues] = useState({});
-    const [producers, setProducers ] = useState([]);
+    const [producers, setProducers] = useState([]);
     const [formData, setFormData] = useState({
         cropName: '',
         location: '',
@@ -58,7 +58,7 @@ const AddCrop = () => {
         if (!endDate) newErrors.endDate = 'Farming end date is required';
         if (!formData.price) newErrors.price = 'Price is required';
         if (!formData.quantity) newErrors.quantity = 'Quantity is required';
-        if(!dropdownValues?.producer) newErrors.producer = 'Producer is required'
+        if (!dropdownValues?.producer) newErrors.producer = 'Producer is required'
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -74,14 +74,14 @@ const AddCrop = () => {
 
     useEffect(() => {
         getAllUsers();
-    },[])
+    }, [])
 
     useEffect(() => {
-        if(allUsers?.length){
+        if (allUsers?.length) {
             const producer = allUsers?.filter(user => user.role === 2);
             setProducers(producer);
         }
-    },[allUsers])
+    }, [allUsers])
 
     return (
         <UserLayout>
@@ -100,6 +100,11 @@ const AddCrop = () => {
                         style={{ borderColor: errors.cropName ? 'red' : '' }}
                     />
                     {errors.cropName && <p className='text-red-500 text-sm'>{errors.cropName}</p>}
+                </div>
+                <div className='flex flex-col gap-0.5'>
+                    <label className='text-base font-medium'>Sold to(Producer)</label>
+                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={producers || []} searchBy={"name"} fieldName="producer" placeholder='Select Producer' />
+                    {errors.producer && <p className='text-red-500 text-sm'>{errors.producer}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
                     <label className='text-base font-medium'>Location</label>
@@ -154,11 +159,7 @@ const AddCrop = () => {
                     />
                     {errors.quantity && <p className='text-red-500 text-sm'>{errors.quantity}</p>}
                 </div>
-                <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Sold to(Producer)</label>
-                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={producers || []} searchBy={"name"} fieldName="producer" placeholder='Select Producer' />
-                    {errors.producer && <p className='text-red-500 text-sm'>{errors.producer}</p>}
-                </div>
+
                 <button
                     className='bg-[#A1045A] mt-1 text-white px-4 py-1 font-medium text-center rounded'
                     type='submit'
