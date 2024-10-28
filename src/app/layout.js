@@ -35,12 +35,7 @@ export default function RootLayout({ children }) {
           <Web3ContextProvider>
             {children}
           </Web3ContextProvider>
-
         </AntdRegistry>
-        {/* <Toaster position="top-right" richColors closeButton>
-        
-        </Toaster> */}
-
       </body>
     </html>
   );

@@ -1,31 +1,30 @@
-'use client'
+'use client';
+
 import React, { useContext, useEffect, useState } from 'react';
 import Breadcrumb from '@/components/utils/Breadcrumb';
 import UserLayout from '@/layouts/UserLayout';
-import { DatePicker, Input, Spin } from 'antd';
+import { DatePicker, Input, Select, Space, Spin } from 'antd';
 import { Web3Context } from '@/context/Web3Context';
 import { LoadingOutlined } from '@ant-design/icons';
 import Dropdown from '@/components/utils/CustomDropdown';
-import CustomModal from '@/components/utils/Modal';
-import FoodQrModal from './components/FoodQrModal';
-import { generateRandomUID } from '@/components/lib/RandomUID';
 
-const AddRetail = () => {
-    const [generatedQRCode, setGeneratedQRCode] = useState(null);
-    const [retailID, setRetailID] = useState('');
-    const { loading, foodItems, fetchAllFoodItems, distributions, fetchAllDistributions, addRetailEntry, isRetailerAdded, setIsRetailerAdded } = useContext(Web3Context);
+const AddFoods = () => {
+    const { loading, addFoodItem, crops, fetchAllCrops, allUsers, getAllUsers } = useContext(Web3Context);
+    const [distributors, setDistributors] = useState([]);
     const [startDate, setStartDate] = useState('');
-    const [sellDate, setSellDate] = useState('');
     const [expireDate, setExpireDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     const [dropdownValues, setDropdownValues] = useState({});
-    const distributionIds = distributions?.map(distribution => ({ id: parseInt(distribution?.distributorId, 16) }));
-    const [open, setOpen] = useState(false);
+    const [selectedCrops, setSelectedCrops] = useState([]);
+
     const [formData, setFormData] = useState({
+        foodName: '',
         location: '',
         price: '',
         quantity: ''
     });
 
+    console.log("crops", crops);
     const [errors, setErrors] = useState({});
 
     const onChangeStartDate = (date, dateString) => {
@@ -36,18 +35,18 @@ const AddRetail = () => {
     };
 
     const onChangeEndDate = (date, dateString) => {
-        setSellDate(dateString);
+        setEndDate(dateString);
         if (dateString) {
-            setErrors(prev => ({ ...prev, sellDate: '' })); // Clear error if valid
+            setErrors(prev => ({ ...prev, endDate: '' })); // Clear error if valid
         }
     };
-
     const onChangeExpireDate = (date, dateString) => {
         setExpireDate(dateString);
         if (dateString) {
-            setErrors(prev => ({ ...prev, expireDate: '' })); // Clear error if valid
+            setErrors(prev => ({ ...prev, endDate: '' })); // Clear error if valid
         }
     };
+
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -62,94 +61,93 @@ const AddRetail = () => {
         }
     };
 
+    const handleChange = (value) => {
+        console.log('Selected IDs:', value); // You can see the selected IDs in the console
+        setSelectedCrops(value); // Update state with the selected IDs
+    };
+
     const validateForm = () => {
         const newErrors = {};
-        if (!dropdownValues?.food) newErrors.food = 'Food is required';
-        if (!dropdownValues?.distribution) newErrors.distribution = 'Distribution is required';
+        if (!formData.foodName) newErrors.foodName = 'Food name is required';
         if (!formData.location) newErrors.location = 'Location is required';
-        if (!startDate) newErrors.startDate = 'Received date is required';
-        if (!sellDate) newErrors.sellDate = 'Sell date is required';
+        if (!startDate) newErrors.startDate = 'Start date is required';
+        if (!endDate) newErrors.endDate = 'End date is required';
         if (!expireDate) newErrors.expireDate = 'Expire date is required';
+        if (selectedCrops.length == 0) newErrors.cropName = 'No Crops is selected';
         if (!formData.price) newErrors.price = 'Price is required';
         if (!formData.quantity) newErrors.quantity = 'Quantity is required';
+        if (!dropdownValues?.distributor) newErrors.quantity = 'Distributor is required';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    // useEffect to handle QR code generation and modal state
-    useEffect(() => {
-        if (isRetailerAdded) {
-            setOpen(true);
-
-            // Generate dynamic URL
-            const dynamicUrl = `https://food-traceability-system.netlify.app/trace-food/${retailID}`;
-            setGeneratedQRCode(dynamicUrl);
-        }
-    }, [isRetailerAdded, dropdownValues?.food?.foodId]);
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!validateForm()) return; // Block submission if validation fails
 
-        console.log(formData)
         // Perform any form submission actions here
-        addRetailEntry(
-            retailID,
-            parseInt(dropdownValues?.food?.foodId?._hex, 16),
-            dropdownValues?.distribution?.id,
-            formData?.location,
-            startDate,
-            sellDate,
-            formData?.price,
-            formData?.quantity,
-            expireDate
-        );
+        addFoodItem(formData.foodName, selectedCrops, formData.location, startDate, endDate, formData.price, formData.quantity, expireDate, dropdownValues?.distributor?.wallet);
     };
 
     useEffect(() => {
-        fetchAllFoodItems();
-        fetchAllDistributions();
-        setRetailID(generateRandomUID());
-    }, []);
-
-
+        fetchAllCrops();
+        getAllUsers();
+    }, [])
+    
+    useEffect(() => {
+        if (allUsers?.length) {
+            const distributor = allUsers?.filter(user => user.role === 3);
+            setDistributors(distributor);
+        }
+    }, [allUsers])
+    console.log(dropdownValues?.distributor?.wallet)
     return (
         <UserLayout>
-            <Breadcrumb title='Add Retail Information' path='Dashboard / Add Retail' />
+            <Breadcrumb title='Add Food' path='Dashboard / Add Foods' />
             <form
                 className='mt-6 flex flex-col mx-auto gap-3 max-w-[750px] px-5 py-5 bg-white rounded'
                 onSubmit={handleSubmit}
             >
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Retail ID</label>
+                    <label className='text-base font-medium'>Food Name</label>
                     <Input
-                        placeholder='Retail ID'
-                        name='retail_id'
-                        value={retailID}
+                        placeholder='Food Name'
+                        name='foodName'
+                        value={formData.foodName}
                         onChange={handleInputChange}
-                        disabled={true}
-                    // style={{ borderColor: errors.location ? 'red' : '' }}
+                        style={{ borderColor: errors.foodName ? 'red' : '' }}
                     />
-                    {/* {errors.location && <p className='text-red-500 text-sm'>{errors.location}</p>} */}
+                    {errors.foodName && <p className='text-red-500 text-sm'>{errors.foodName}</p>}
+                </div>
+                <div className='flex flex-col gap-0.5'>
+                    <label className='text-base font-medium'>Distribute to(Distributor)</label>
+                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={distributors || []} searchBy={"name"} fieldName="distributor" placeholder='Select Distributor' />
+                    {errors.distributor && <p className='text-red-500 text-sm'>{errors.producer}</p>}
+                </div>
+                <div className='flex flex-col gap-0.5'>
+                    <label className='text-base font-medium'>Select Crops</label>
+                    <Space style={{ width: '100%' }} direction="vertical">
+                        <Select
+                            mode="multiple"
+                            allowClear
+                            style={{ width: '100%', borderColor: errors.cropName ? 'red' : '' }}
+                            placeholder="Select Crops"
+                            onChange={handleChange} // Step 3: Bind handleChange to the onChange event
+                            options={crops?.map(crop => ({
+                                label: `${crop.cropName} (ID: ${parseInt(crop.cropId?._hex, 16)})`, // Display cropsName and cropsID
+                                value: parseInt(crop.cropId?._hex, 16)// Select cropsID as the value
+                            }))}
+
+                        />
+                        {errors.cropName && <p className='text-red-500 text-sm'>{errors.cropName}</p>}
+                    </Space>
                 </div>
 
-                <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Select Food</label>
-                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={foodItems} searchBy={"foodName"} fieldName="food" placeholder='Select Food' />
 
-                    {errors.food && <p className='text-red-500 text-sm'>{errors.food}</p>}
-                </div>
 
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Select Distribution ID</label>
-                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={distributionIds} searchBy={"id"} fieldName="distribution" placeholder='Select Distribution ID' />
-
-                    {errors.distribution && <p className='text-red-500 text-sm'>{errors.distribution}</p>}
-                </div>
-
-                <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Location</label>
+                    <label className='text-base font-medium'>Production Location</label>
                     <Input
                         placeholder='Location'
                         name='location'
@@ -160,7 +158,7 @@ const AddRetail = () => {
                     {errors.location && <p className='text-red-500 text-sm'>{errors.location}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Received Date</label>
+                    <label className='text-base font-medium'>Start Date</label>
                     <DatePicker
                         onChange={onChangeStartDate}
                         className='w-full'
@@ -169,16 +167,16 @@ const AddRetail = () => {
                     {errors.startDate && <p className='text-red-500 text-sm'>{errors.startDate}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Sell Date</label>
+                    <label className='text-base font-medium'>End Date</label>
                     <DatePicker
                         onChange={onChangeEndDate}
                         className='w-full'
-                        style={{ borderColor: errors.sellDate ? 'red' : '' }}
+                        style={{ borderColor: errors.endDate ? 'red' : '' }}
                     />
-                    {errors.sellDate && <p className='text-red-500 text-sm'>{errors.sellDate}</p>}
+                    {errors.endDate && <p className='text-red-500 text-sm'>{errors.endDate}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Price</label>
+                    <label className='text-base font-medium'>Price(/Pcs)</label>
                     <Input
                         placeholder='Price'
                         name='price'
@@ -194,9 +192,9 @@ const AddRetail = () => {
                     <Input
                         placeholder='Quantity'
                         name='quantity'
-                        type='number'
                         value={formData.quantity}
                         onChange={handleInputChange}
+                        type='number'
                         style={{ borderColor: errors.quantity ? 'red' : '' }}
                     />
                     {errors.quantity && <p className='text-red-500 text-sm'>{errors.quantity}</p>}
@@ -214,12 +212,11 @@ const AddRetail = () => {
                     className='bg-[#A1045A] mt-1 text-white px-4 py-1 font-medium text-center rounded'
                     type='submit'
                 >
-                    {loading ? <span className='flex items-center justify-center gap-1.5'> <Spin indicator={<LoadingOutlined spin />} /> Creating Retail Information</span> : <span>Add Retail Information</span>}
+                    {loading ? <span className='flex items-center justify-center gap-1.5'> <Spin indicator={<LoadingOutlined spin />} /> Creating Food</span> : <span>Add Food</span>}
                 </button>
             </form>
-            <CustomModal closable={false} modalClass={'!max-w-[700px] !w-full'} modalTitle={''} setOpen={setOpen} open={open} modalContent={<FoodQrModal generatedQRCode={generatedQRCode} setOpen={setOpen} setIsRetailerAdded={setIsRetailerAdded} />} />
         </UserLayout>
     );
 };
 
-export default AddRetail;
+export default AddFoods;

@@ -1,18 +1,20 @@
 'use client';
-
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Breadcrumb from '@/components/utils/Breadcrumb';
 import UserLayout from '@/layouts/UserLayout';
 import { DatePicker, Input, Spin } from 'antd';
 import { Web3Context } from '@/context/Web3Context';
 import { LoadingOutlined } from '@ant-design/icons';
+import Dropdown from '@/components/utils/CustomDropdown';
 
-const AddCrop = () => {
-    const { loading, addCrop } = useContext(Web3Context);
+const AddDistribute = () => {
+    const { loading, foodItems, fetchAllFoodItems, addDistribution, allUsers, getAllUsers } = useContext(Web3Context);
+    const [retailers, setRetailers] = useState([]);
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
+    const [expireDate, setExpireDate] = useState('');
+    const [dropdownValues, setDropdownValues] = useState({});
     const [formData, setFormData] = useState({
-        cropName: '',
         location: '',
         price: '',
         quantity: ''
@@ -34,6 +36,12 @@ const AddCrop = () => {
         }
     };
 
+    const onChangeExpireDate = (date, dateString) => {
+        setExpireDate(dateString);
+        if (dateString) {
+            setErrors(prev => ({ ...prev, expireDate: '' })); // Clear error if valid
+        }
+    };
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -47,14 +55,17 @@ const AddCrop = () => {
         }
     };
 
+
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.cropName) newErrors.cropName = 'Crop name is required';
-        if (!formData.location) newErrors.location = 'Location is required';
-        if (!startDate) newErrors.startDate = 'Farming start date is required';
-        if (!endDate) newErrors.endDate = 'Farming end date is required';
+        if (!dropdownValues?.food) newErrors.food = 'Food is required';
+        // if (!formData.location) newErrors.location = 'Location is required';
+        if (!startDate) newErrors.startDate = 'Received date is required';
+        if (!endDate) newErrors.endDate = 'Send date is required';
+        // if (!expireDate) newErrors.expireDate = 'Expire date is required';
         if (!formData.price) newErrors.price = 'Price is required';
         if (!formData.quantity) newErrors.quantity = 'Quantity is required';
+        if (!dropdownValues?.retailer) newErrors.quantity = 'Retailer is required';
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
@@ -65,28 +76,38 @@ const AddCrop = () => {
         if (!validateForm()) return; // Block submission if validation fails
 
         // Perform any form submission actions here
-        addCrop(formData.cropName, formData.location, startDate, endDate, formData.price, formData.quantity);
+        addDistribution(parseInt(dropdownValues?.food?.foodId?._hex, 16), startDate, endDate, formData.price, formData.quantity, dropdownValues?.retailer?.wallet);
     };
 
+    useEffect(() => {
+        fetchAllFoodItems();
+        getAllUsers()
+
+    }, []);
+    useEffect(() => {
+        if (allUsers?.length) {
+            const retailer = allUsers?.filter(user => user.role === 4);
+            setRetailers(retailer);
+        }
+    }, [allUsers])
     return (
         <UserLayout>
-            <Breadcrumb title='Add Crop' path='Dashboard / Add Crop' />
+            <Breadcrumb title='Add Distribution' path='Dashboard / Add Distribution' />
             <form
                 className='mt-6 flex flex-col mx-auto gap-3 max-w-[750px] px-5 py-5 bg-white rounded'
                 onSubmit={handleSubmit}
             >
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Crop Name</label>
-                    <Input
-                        placeholder='Crop Name'
-                        name='cropName'
-                        value={formData.cropName}
-                        onChange={handleInputChange}
-                        style={{ borderColor: errors.cropName ? 'red' : '' }}
-                    />
-                    {errors.cropName && <p className='text-red-500 text-sm'>{errors.cropName}</p>}
+                    <label className='text-base font-medium'>Select Food</label>
+                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={foodItems} searchBy={"foodName"} fieldName="food" placeholder='Select Food' />
+                    {errors.food && <p className='text-red-500 text-sm'>{errors.food}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
+                    <label className='text-base font-medium'>Retail to(/Retailer)</label>
+                    <Dropdown setDropdownValues={setDropdownValues} dropdownValues={dropdownValues} options={retailers || []} searchBy={"name"} fieldName="retailer" placeholder='Select Retailer' />
+                    {errors.distributor && <p className='text-red-500 text-sm'>{errors.producer}</p>}
+                </div>
+                {/* <div className='flex flex-col gap-0.5'>
                     <label className='text-base font-medium'>Location</label>
                     <Input
                         placeholder='Location'
@@ -96,9 +117,9 @@ const AddCrop = () => {
                         style={{ borderColor: errors.location ? 'red' : '' }}
                     />
                     {errors.location && <p className='text-red-500 text-sm'>{errors.location}</p>}
-                </div>
+                </div> */}
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Farming Start Date</label>
+                    <label className='text-base font-medium'>Received Date</label>
                     <DatePicker
                         onChange={onChangeStartDate}
                         className='w-full'
@@ -107,7 +128,7 @@ const AddCrop = () => {
                     {errors.startDate && <p className='text-red-500 text-sm'>{errors.startDate}</p>}
                 </div>
                 <div className='flex flex-col gap-0.5'>
-                    <label className='text-base font-medium'>Farming End Date</label>
+                    <label className='text-base font-medium'>Send Date</label>
                     <DatePicker
                         onChange={onChangeEndDate}
                         className='w-full'
@@ -132,6 +153,7 @@ const AddCrop = () => {
                     <Input
                         placeholder='Quantity'
                         name='quantity'
+                        type='number'
                         value={formData.quantity}
                         onChange={handleInputChange}
                         style={{ borderColor: errors.quantity ? 'red' : '' }}
@@ -142,11 +164,11 @@ const AddCrop = () => {
                     className='bg-[#A1045A] mt-1 text-white px-4 py-1 font-medium text-center rounded'
                     type='submit'
                 >
-                    {loading ? <span className='flex items-center justify-center gap-1.5'> <Spin indicator={<LoadingOutlined spin />} /> Creating Crop</span> : <span>Add Crop</span>}
+                    {loading ? <span className='flex items-center justify-center gap-1.5'> <Spin indicator={<LoadingOutlined spin />} /> Creating Distribution</span> : <span>Add Distribution</span>}
                 </button>
             </form>
         </UserLayout>
     );
 };
 
-export default AddCrop;
+export default AddDistribute;

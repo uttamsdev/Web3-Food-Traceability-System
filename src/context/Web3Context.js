@@ -27,6 +27,7 @@ export const Web3ContextProvider = ({ children }) => {
     const [allUsers, setAllUsers] = useState();
     const [approveLoading, setApproveLoading] = useState(false);
     const [isRetailerAdded, setIsRetailerAdded] = useState(false);
+    const [retails, setRetails] = useState([]);
 
     // Create a connection to the smart contract
     const createEthereumContract = () => {
@@ -158,11 +159,11 @@ export const Web3ContextProvider = ({ children }) => {
     };
 
     // Farmer adds a crop
-    const addCrop = async (cropName, location, startDate, endDate, price, quantity) => {
+    const addCrop = async (cropName, location, startDate, endDate, price, quantity, _producer) => {
         try {
             setLoading(true);
             const contract = createEthereumContract();
-            const transaction = await contract.addCrop(cropName, location, startDate, endDate, price, quantity);
+            const transaction = await contract.addCrop(cropName, location, startDate, endDate, price, quantity, _producer);
             await transaction.wait();
             console.log("Crop added:", transaction);
             setLoading(false);
@@ -190,11 +191,11 @@ export const Web3ContextProvider = ({ children }) => {
     };
 
     // Producer adds a food item
-    const addFoodItem = async (foodName, cropIds, location, startDate, endDate, price, quantity, expireDate) => {
+    const addFoodItem = async (foodName, cropIds, location, startDate, endDate, price, quantity, expireDate, distributor) => {
         try {
             setLoading(true);
             const contract = createEthereumContract();
-            const transaction = await contract.addFoodItem(foodName, cropIds, location, startDate, endDate, price, quantity, expireDate);
+            const transaction = await contract.addFoodItem(foodName, cropIds, location, startDate, endDate, price, quantity, expireDate, distributor);
             await transaction.wait();
             console.log("Food item added:", transaction);
             setLoading(false);
@@ -222,11 +223,11 @@ export const Web3ContextProvider = ({ children }) => {
     };
 
     // Distributor adds distribution details
-    const addDistribution = async (foodId, location, receivedDate, sendDate, price, quantity, expireDate) => {
+    const addDistribution = async (foodId, receivedDate, sendDate, price, quantity, retailer) => {
         try {
             setLoading(true);
             const contract = createEthereumContract();
-            const transaction = await contract.addDistribution(foodId, location, receivedDate, sendDate, price, quantity, expireDate);
+            const transaction = await contract.addDistribution(foodId, receivedDate, sendDate, price, quantity, retailer);
             await transaction.wait();
             setLoading(false);
             console.log("Distribution added:", transaction);
@@ -253,12 +254,26 @@ export const Web3ContextProvider = ({ children }) => {
         }
     };
 
-    // Retailer adds retail entry
-    const addRetailEntry = async (retailId, foodId, distributorId, location, receivedDate, sellDate, price, quantity, expireDate) => {
+     // Fetch all distributions
+     const getAllRetails = async () => {
         try {
             setLoading(true);
             const contract = createEthereumContract();
-            const transaction = await contract.addRetailEntry(retailId, foodId, distributorId, location, receivedDate, sellDate, price, quantity, expireDate);
+            const distributions = await contract.getAllRetails();
+            setRetails(distributions);
+            setLoading(false);
+        } catch (error) {
+            console.error("Error fetching distributions:", error);
+            setLoading(false);
+        }
+    };
+
+    // Retailer adds retail entry
+    const addRetailEntry = async (retailId, foodId, distributorId, location, receivedDate, sellDate, price, quantity) => {
+        try {
+            setLoading(true);
+            const contract = createEthereumContract();
+            const transaction = await contract.addRetailEntry(retailId, foodId, distributorId, location, receivedDate, sellDate, price, quantity);
             await transaction.wait();
             console.log("Retail entry added:", transaction);
             setLoading(false);
@@ -347,7 +362,9 @@ export const Web3ContextProvider = ({ children }) => {
                 approveLoading,
                 fetchAllCrops,
                 isRetailerAdded,
-                setIsRetailerAdded
+                setIsRetailerAdded,
+                getAllRetails,
+                retails
             }}
         >
             {children}
